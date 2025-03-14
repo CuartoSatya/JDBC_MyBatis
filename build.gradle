@@ -29,14 +29,10 @@ dependencies {
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	// JPAとHibernateの依存関係
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.hibernate:hibernate-core'
 	// データベースの接続用（MySQLの場合）
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'mysql:mysql-connector-java:8.0.29'
+	implementation 'mysql:mysql-connector-java:8.0.33'
 	// JPAとHibernateの依存関係
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.hibernate:hibernate-core:5.6.9.Final'  // Hibernateのバージョンを指定
 }
 
