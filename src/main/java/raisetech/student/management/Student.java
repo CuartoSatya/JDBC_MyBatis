@@ -1,15 +1,12 @@
 package raisetech.student.management;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name="student")
 public class Student {
-    private String name;
-    private int age;
 
     @Column(name="name")
     private String name;
