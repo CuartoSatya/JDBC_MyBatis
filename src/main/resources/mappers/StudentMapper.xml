@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="raisetech.student.management.StudentRepository">
+<mapper namespace="raisetech.student.management.StudentMapper">
 
     <!-- 名前で学生情報を取得する -->
     <select id="findByName" resultType="raisetech.student.management.Student" parameterType="String">
