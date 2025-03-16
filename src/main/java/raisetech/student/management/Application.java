@@ -27,7 +27,7 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 	@GetMapping("/studentInfo")
-	public String getstudentInfo() {
+	public String getStudentInfo() {
 		Student student = repository.findByName("Tanaka Taro");
 		if (student == null) {
 			return "Student not found";

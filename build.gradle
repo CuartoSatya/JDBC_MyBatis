@@ -29,11 +29,6 @@ dependencies {
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	// データベースの接続用（MySQLの場合）
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'mysql:mysql-connector-java:8.0.33'
-	// JPAとHibernateの依存関係
-	implementation 'org.hibernate.orm:hibernate-core:6.6.10.Final'  // Hibernate 6系を使用
 }
 
 tasks.named('test') {
