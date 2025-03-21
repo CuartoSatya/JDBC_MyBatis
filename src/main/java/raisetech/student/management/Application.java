@@ -1,7 +1,6 @@
 package raisetech.student.management;
 
 import java.util.Map;
-
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -22,7 +21,6 @@ public class Application {
 	private Map<String, Integer> student;
 
 	public static void main(String[] args) {
-		//localhost:8080
 		SpringApplication.run(Application.class, args);
 	}
 	@GetMapping("/studentInfo")
