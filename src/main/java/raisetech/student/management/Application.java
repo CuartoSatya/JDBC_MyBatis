@@ -20,7 +20,7 @@ public class Application {
 	private String name = "Enami Kouji";
 	private int age = 44;
 
-	private Map<String, String> student;
+	private Map<String, Integer> student;
 
 	public static void main(String[] args) {
 		//localhost:8080
