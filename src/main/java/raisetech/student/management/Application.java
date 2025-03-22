@@ -35,8 +35,7 @@ public class Application {
 
 	@PostMapping("/student")
 	public void registerStudent(@RequestParam String name, @RequestParam int age) {
-		this.name = name;
-		this.age = age;
+		repository.registerStudent(name, age);
 	}
 
 	@PostMapping("/studentName")
