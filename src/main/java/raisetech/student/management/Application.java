@@ -24,8 +24,8 @@ public class Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-	@GetMapping("/studentInfo")
-	public String getStudentInfo() {
+	@GetMapping("/student")
+	public String getStudent() {
 		Student student = repository.findByName("Tanaka Taro");
 		if (student == null) {
 			return "Student not found";
@@ -33,8 +33,8 @@ public class Application {
 		return student.getName() + " " + student.getAge() + " years old";
 	}
 
-	@PostMapping("/studentInfo")
-	public void setName(@RequestParam String name, @RequestParam int age) {
+	@PostMapping("/student")
+	public void registerStudent(@RequestParam String name, @RequestParam int age) {
 		this.name = name;
 		this.age = age;
 	}
