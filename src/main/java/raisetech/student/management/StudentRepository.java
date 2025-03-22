@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface StudentRepository {
     @Select("SELECT * FROM student WHERE name = #{name}")
     Student findByName(String name);
-    @Insert("INSERT student values(#{name},#{age})")
+    @Insert("INSERT INTO student (name, age) VALUES (#{name}, #{age})")
     void registerStudent(String name, int age);
+
 }
