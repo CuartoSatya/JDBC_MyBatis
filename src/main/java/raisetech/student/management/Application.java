@@ -25,8 +25,8 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 	@GetMapping("/student")
-	public String getStudent() {
-		Student student = repository.findByName("Tanaka Taro");
+	public String getStudent(@RequestParam String name) {
+		Student student = repository.findByName(name);
 		if (student == null) {
 			return "Student not found";
 		}
@@ -34,7 +34,7 @@ public class Application {
 	}
 
 	@PostMapping("/student")
-	public void registerStudent(@RequestParam String name, @RequestParam int age) {
+	public void registerStudent(@RequestParam String name, int age) {
 		repository.registerStudent(name, age);
 	}
 
