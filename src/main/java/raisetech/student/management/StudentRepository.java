@@ -9,5 +9,5 @@ public interface StudentRepository {
     @Insert("INSERT INTO student (name, age) VALUES (#{name}, #{age})")
     void registerStudent(@Param("name") String name, @Param("age") int age);
     @Update("UPDATE student SET age = #{age} WHERE name = #{name}")
-    void updateStudent(String name, int age);
+    void updateStudent(@Param("name") String name, @Param("age") int age);
 }
