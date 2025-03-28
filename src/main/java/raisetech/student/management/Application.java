@@ -21,9 +21,6 @@ public class Application {
 	@GetMapping("/student")
 	public String getStudent(@RequestParam String name) {
 		Student student = repository.findByName(name);
-		if (student == null) {
-			return "Student not found";
-		}
 		return student.getName() + " " + student.getAge() + " years old";
 	}
 	@PostMapping("/student")
