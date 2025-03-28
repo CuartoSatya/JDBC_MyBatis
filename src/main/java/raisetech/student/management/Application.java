@@ -1,6 +1,5 @@
 package raisetech.student.management;
 
-import java.util.List;
 import java.util.Map;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @SpringBootApplication
 @MapperScan("raisetech.student.management")
+@RestController
 public class Application {
 	@Autowired
 	private StudentRepository repository;
@@ -20,9 +20,10 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 	@GetMapping("/student")
-	public List<Student> getAllStudents() {
-		return repository.findAll();
-    }
+	public String getStudent(@RequestParam String name) {
+		Student student = repository.findByName(name);
+		return student.getName() + " " + student.getAge() + " years old";
+	}
 	@PostMapping("/student")
 	public void registerStudent(@RequestParam String name, int age) {
 		repository.registerStudent(name, age);
