@@ -12,6 +12,7 @@ import java.util.List;
 @MapperScan("raisetech.student.management")
 @RestController
 public class Application {
+
 	@Autowired
 	private raisetech.student.management.StudentRepository repository;
 
