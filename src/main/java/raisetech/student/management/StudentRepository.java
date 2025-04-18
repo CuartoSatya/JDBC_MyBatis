@@ -9,8 +9,4 @@ public interface StudentRepository {
 
     @Select("SELECT * FROM student WHERE name LIKE CONCAT('%', #{name}, '%'))")
     List<raisetech.student.management.Student> searchByName(@Param("name") String name);
-
-    @Select("SELECT 1")
-    Integer testQuery();
-
 }
