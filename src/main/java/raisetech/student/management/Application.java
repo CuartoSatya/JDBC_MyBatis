@@ -14,18 +14,9 @@ import java.util.List;
 public class Application {
 
 	@Autowired
-	private raisetech.student.management.StudentRepository repository;
+	private StudentMapper studentMapper;
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
-
-	@GetMapping("/student")
-	public List<raisetech.student.management.Student> getStudentList(@RequestParam String name) {
-		return repository.searchByName(name);
-	}
 	@GetMapping("/test")
-	public Integer testDatabaseConnection() {
-		return repository.testQuery();
-	}
-}
+	public Integer testQuery() {
+		return studentMapper.testQuery();
+	}}
