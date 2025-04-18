@@ -24,4 +24,8 @@ public class Application {
 	public List<raisetech.student.management.Student> getStudentList(@RequestParam String name) {
 		return repository.searchByName(name);
 	}
+	@GetMapping("/test")
+	public Integer testDatabaseConnection() {
+		return repository.testQuery();
+	}
 }
