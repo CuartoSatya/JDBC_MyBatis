@@ -7,5 +7,5 @@ import java.util.List;
 public interface StudentRepository {
 
     @Select("SELECT * FROM student WHERE name LIKE CONCAT('%', #{name}, '%'))")
-    List<raisetech.student.management.Student> findAll();
+    List<Student> search(String name);
 }
