@@ -12,7 +12,7 @@ public class Student {
 
     public int getId() { return idStudent; }
 
-    public void setId(int id) { this.idStudent = id; }
+    public void setId(int id) { this.idStudent = idStudent; }
 
     public String getName() {
         return name;
@@ -27,7 +27,7 @@ public class Student {
     }
 
     public void setKanaName(String KanaName) {
-        this.kanaName = name;
+        this.kanaName = kanaName;
     }
 
     public String getNickname() {
@@ -35,20 +35,20 @@ public class Student {
     }
 
     public void setNickname(String nickname) {
-        this.nickname = name;
+        this.nickname = nickname;
     }
 
     public String getMailAddress() {
         return mailAddress;
     }
 
-    public void setMailAddress(String mailAddress) { this.mailAddress = name;}
+    public void setMailAddress(String mailAddress) { this.mailAddress = mailAddress;}
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) { this.address = name;}
+    public void setAddress(String address) { this.address = address;}
 
     public int getAge() {
         return age;
@@ -61,6 +61,6 @@ public class Student {
     public int getSex() { return sex; }
 
     public void setAge(int sex) {
-        this.sex = age;
+        this.sex = sex;
     }
 }

@@ -10,12 +10,15 @@ import java.util.List;
 public interface StudentRepository {
 
     @Select("SELECT * FROM student WHERE name LIKE CONCAT('%', #{name}, '%')")
-    @Select("SELECT * FROM student")
     @Results({
             @Result(property = "idStudent", column = "id_student"),
             @Result(property = "kanaName", column = "kana_name"),
-            @Result(property = "mailAddress", column = "mail_address")
-            // 他のカラムも同様に追加
+            @Result(property = "mailAddress", column = "mail_address"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "nickname", column = "nickname"),
+            @Result(property = "address", column = "address"),
+            @Result(property = "age", column = "age"),
+            @Result(property = "sex", column = "sex")
     })
-    List<Student> findAll();
+    List<Student> findByName(String name);
 }
