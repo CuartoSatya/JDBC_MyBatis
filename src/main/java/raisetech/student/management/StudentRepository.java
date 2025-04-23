@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper
 public interface StudentRepository {
 
-    @Select("SELECT id_student AS idstudent, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, address, age, sex FROM student WHERE name LIKE CONCAT('%', #{name}, '%')")
+    @Select("SELECT id_student AS id, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, address, age, sex FROM student WHERE name LIKE CONCAT('%', #{name}, '%')")
     @Results({
-            @Result(property = "idStudent", column = "id_student"),
+            @Result(property = "id", column = "id_student"),
             @Result(property = "kanaName", column = "kana_name"),
             @Result(property = "mailAddress", column = "mail_address"),
             @Result(property = "name", column = "name"),

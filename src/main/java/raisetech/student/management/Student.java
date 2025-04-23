@@ -1,7 +1,7 @@
 package raisetech.student.management;
 
 public class Student {
-    private int idStudent;
+    private int id;
     private String name;
     private String kanaName;
     private String nickname;
@@ -10,9 +10,9 @@ public class Student {
     private int age;
     private int sex;
 
-    public int getId() { return idStudent; }
+    public int getId() { return id; }
 
-    public void setId(int id) { this.idStudent = idStudent; }
+    public void setId(int id) { this.id = id; }
 
     public String getName() {
         return name;
@@ -55,12 +55,12 @@ public class Student {
     }
 
     public void setSex(int sex) {
-        this.age = age;
+        this.sex = sex;
     }
 
     public int getSex() { return sex; }
 
-    public void setAge(int sex) {
-        this.sex = sex;
+    public void setAge(int age) {
+        this.age = age;
     }
 }
