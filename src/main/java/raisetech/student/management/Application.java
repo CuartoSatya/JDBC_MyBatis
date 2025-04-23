@@ -1,27 +1,37 @@
 package raisetech.student.management;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@MapperScan("raisetech.student.management")
 @RestController
 public class Application {
 
-	@Autowired
-	private raisetech.student.management.StudentRepository repository;
+	private String name = "Oda Shintaro";
+	private String age = "44";
+
+	private Map<String,String> student;
 
 	public static void main(String[] args) {
+		//localhost:8080
 		SpringApplication.run(Application.class, args);
 	}
 
-	@GetMapping("/studentCourses")
-	public List<StudentCourses> getStudentCourses() {
-		return repository.search();
+	@GetMapping("/studentInfo")
+	public String getStudentInfo() {
+		return name + " " + age + " years old";
+				}
+	@PostMapping("/studentInfo")
+	public void setStudentInfo(String name, String age) {
+		this.name = name;
+		this.age = age;
 	}
-}
+	@PostMapping("/studentName")
+	public void UpdateStudentName(String name) {
+		this.name = name;
+	}
+ }
