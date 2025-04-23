@@ -20,8 +20,8 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@GetMapping("/studentList")
-	public List<Student> getStudentList() {
+	@GetMapping("/studentCourses")
+	public List<StudentCourses> getStudentCourses() {
 		return repository.search();
 	}
 }
