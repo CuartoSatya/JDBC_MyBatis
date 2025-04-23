@@ -26,7 +26,7 @@ public class Student {
         return kanaName;
     }
 
-    public void setKanaName(String KanaName) {
+    public void setKanaName(String kanaName) {
         this.kanaName = kanaName;
     }
 
