@@ -7,6 +7,7 @@ import java.util.List;
 @Mapper
 public interface StudentRepository {
 
-    @Select("SELECT id_student AS id, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, address, age, sex FROM student")
+    @Select("SELECT id_student AS id, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, address, age, " +
+            "sex FROM student")
     List<StudentCourses> search();
 }
