@@ -1,9 +1,9 @@
-package raisetech.student.management.repository;
+package raisetech.student.management;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import raisetech.student.management.data.Student;
-import raisetech.student.management.data.StudentCourses;
+import raisetech.student.management.data.StudentsCourses;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface StudentRepository {
             "sex FROM student")
     List<Student> searchStudent();
 
-    @Select("SELECT id, student_id AS studentId, name, starting_date AS startingDate, assured_finishing_date " +
-            "AS assuredFinishingDate FROM student_courses")
-    List<StudentCourses> searchStudentsCourses();
+   @Select("SELECT id, student_id AS studentId, name, starting_date AS startingDate, assured_finishing_date " +
+            "AS assuredFinishingDate FROM students_courses")
+    List<StudentsCourses> searchStudentCourses();
 }
