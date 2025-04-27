@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="raisetech.student.management.StudentMapper">
+<mapper namespace="raisetech.student.management.data.StudentMapper">
     <!-- 名前で学生情報を取得する -->
-    <select id="findByName" resultType="raisetech.student.management.Student" parameterType="String">
+    <select id="findByName" resultType="raisetech.student.management.data.Student" parameterType="String">
         SELECT name, age FROM student WHERE name = #{name}
     </select>
 
