@@ -14,14 +14,14 @@ import java.util.List;
 public class Application {
 
 	@Autowired
-	private raisetech.student.management.StudentRepository repository;
+	private raisetech.student.management.StudentsCoursesRepository repository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@GetMapping("/studentCourses")
-	public List<StudentCourses> getStudentCourses() {
-		return repository.search();
+	@GetMapping("/studentsCourses")
+	public List<StudentsCourses> getStudentsCourses() {
+		return repository.searchAll();
 	}
 }
