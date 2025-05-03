@@ -11,10 +11,10 @@ import java.util.List;
 public interface StudentRepository {
 
     @Select("SELECT id_student AS id, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, " +
-            "address, age, sex FROM student")
+            "address, age, sex, remark, is_deleted FROM student")
     List<Student> searchStudent();
 
     @Select("SELECT id, student_id AS studentId, name, starting_date AS startingDate, " +
-            "assured_finishing_date AS assuredFinishingDate FROM students_courses")
+            "assured_finishing_date AS assuredFinishingDate FROM student_courses")
     List<StudentsCourses> searchStudentsCourses();
 }
