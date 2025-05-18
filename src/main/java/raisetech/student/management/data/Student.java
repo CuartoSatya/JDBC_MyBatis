@@ -16,5 +16,5 @@ public class Student {
     private String sex;
     private String remark;
     private boolean deleted;
-    private String courseName;
+    private String course;
 }

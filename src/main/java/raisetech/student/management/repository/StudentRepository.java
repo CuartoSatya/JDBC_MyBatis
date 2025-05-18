@@ -1,16 +1,22 @@
 package raisetech.student.management.repository;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+import org.springframework.transaction.annotation.Transactional;
 import raisetech.student.management.data.Student;
 import raisetech.student.management.data.StudentsCourses;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface StudentRepository {
+
+    @Transactional
+    @Select("SELECT id_student AS id, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, " +
+            "address, age, sex, remark, deleted, course FROM student WHERE id_student = #{id}")
+    Student findById(@Param("id") Integer id);
+
+    void updateStudent(Student student);
 
     @Select("SELECT id_student AS id, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, " +
             "address, age, sex, remark, deleted FROM student")
@@ -30,5 +36,4 @@ public interface StudentRepository {
     @Insert("INSERT INTO student_courses (student_id, name, starting_date, assured_finishing_date) " +
             "VALUES (#{studentId}, #{name}, #{startingDate}, #{assuredFinishingDate})")
     void insertStudentCourse(StudentsCourses sc);
-
 }

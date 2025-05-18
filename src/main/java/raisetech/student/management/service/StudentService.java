@@ -2,6 +2,7 @@ package raisetech.student.management.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import raisetech.student.management.data.Student;
 import raisetech.student.management.data.StudentsCourses;
 import raisetech.student.management.repository.StudentRepository;
@@ -32,14 +33,23 @@ public class StudentService {
     public void registerStudentandCourse(Student student) {
         repository.insertStudent(student);
 
-        if (student.getCourseName() != null && !student.getCourseName().isEmpty()) {
+        if (student.getCourse() != null && !student.getCourse().isEmpty()) {
             StudentsCourses sc = new StudentsCourses();
             sc.setStudentId(student.getId());
-            sc.setName(student.getCourseName());
+            sc.setName(student.getCourse());
             sc.setStartingDate(LocalDateTime.now());
             sc.setAssuredFinishingDate(LocalDateTime.now().plusMonths(3)); // 仮に3ヶ月後
 
             repository.insertStudentCourse(sc);
         }
+    }
+
+    public Student findStudentById(Integer id) {
+        return repository.findById(id);
+    }
+
+    @Transactional
+    public void updateStudent(Student student) {
+        repository.updateStudent(student);
     }
 }
