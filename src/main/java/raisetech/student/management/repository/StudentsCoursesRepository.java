@@ -1,4 +1,4 @@
-package raisetech.student.management;
+package raisetech.student.management.repository;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
