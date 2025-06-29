@@ -1,9 +1,8 @@
 # デフォルトの無視対象ファイル
-/shelf/
+/.idea/
 /workspace.xml
 /.gradle/
 /build/
 /out/
 *.iml
-/.idea/
 /target/
