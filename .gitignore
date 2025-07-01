@@ -6,3 +6,6 @@
 /out/
 *.iml
 /target/
+/.lock/
+/.class/
+/gradle/
