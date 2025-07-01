@@ -6,7 +6,6 @@ import raisetech.student.management.data.Student;
 import raisetech.student.management.data.StudentsCourses;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mapper
 public interface StudentRepository {
@@ -24,7 +23,12 @@ public interface StudentRepository {
 
     @Select("SELECT id, student_id AS studentId, name, starting_date AS startingDate, " +
             "assured_finishing_date AS assuredFinishingDate FROM student_courses")
-    List<StudentsCourses> searchStudentsCourses();
+    List<StudentsCourses> searchStudentsCoursesList();
+
+    @Select("SELECT id, student_id AS studentId, name, starting_date AS startingDate, " +
+            "assured_finishing_date AS assuredFinishingDate FROM student_courses WHERE student_id = #{studentId}")
+    List<StudentsCourses> searchStudentsCourses(Integer studentId);
+
 
     @Insert("INSERT INTO student (name, kana_name, nickname, mail_address, address, age, sex, remark, deleted) " +
             "VALUES (#{name}, #{kanaName}, #{nickname}, #{mailAddress}, #{address}, #{age}, #{sex}, #{remark}," +
@@ -35,5 +39,18 @@ public interface StudentRepository {
 
     @Insert("INSERT INTO student_courses (student_id, name, starting_date, assured_finishing_date) " +
             "VALUES (#{studentId}, #{name}, #{startingDate}, #{assuredFinishingDate})")
+
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id_student")
+
     void insertStudentCourse(StudentsCourses sc);
+
+    @Update("UPDATE student SET(name = #{name}, kana_name = #{kanaName}, nickname = #{nickname}, mail_address = " +
+            "#{mailAddress}, address = #{address}, age = #{age}, sex = #{sex}, remark = #{remark}, deleted = #{deleted})" +
+            "WHERE id = #{id}")
+
+    void updateStudent(Student student);
+
+    @Update("UPDATE student_courses SET(name = #{name}) WHERE id = #{id}")
+    void updateStudentCourse(StudentsCourses sc);
+
 }

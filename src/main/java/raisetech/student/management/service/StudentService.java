@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raisetech.student.management.data.Student;
 import raisetech.student.management.data.StudentsCourses;
+import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.repository.StudentRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,8 +24,17 @@ public class StudentService {
         return repository.searchStudent();
     }
 
+    public StudentDetail searchStudent(Integer id) {
+        Student student = repository.searchStudent(id);
+        List<StudentsCourses> studentsCourses = repository.searchStudentsCourses(student.getId());
+        StudentDetail.StudentDetail = new StudentDetail();
+        studentDetail.setstudent(student);
+        studentDetail.setstudentCourses(studentsCourses);
+        return studentDetail;
+    }
+
     public  List<StudentsCourses> searchStudentsCoursesList() {
-        return repository.searchStudentsCourses();
+        return repository.searchStudentsCoursesList();
     }
 
     public void registerStudent(Student student) {repository.insertStudent(student); }
@@ -51,4 +61,14 @@ public class StudentService {
     public void updateStudent(Student student) {
         repository.updateStudent(student);
     }
-}
+
+        if (student.getCourse() != null && !student.getCourse().isEmpty()) {
+            StudentsCourses sc = new StudentsCourses();
+            sc.setStudentId(student.getId());
+            sc.setName(student.getCourse());
+            sc.setStartingDate(LocalDateTime.now());
+            sc.setAssuredFinishingDate(LocalDateTime.now().plusMonths(3)); // 仮に3ヶ月後
+
+            repository.updateStudentCourse(sc);
+        }
+    }

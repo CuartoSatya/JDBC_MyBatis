@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>受講生情報更新</title>
+  <title>受講生詳細</title>
   <style>
     label {
       display: inline-block;
@@ -14,7 +14,7 @@
   </style>
 </head>
 <body>
-<h1>受講生情報更新</h1>
+<h1>受講生詳細</h1>
 
 <form th:action="@{/updateStudent}" th:object="${studentDetail}" method="post">
   <input type="hidden" th:field="*{student.id}" />
@@ -64,16 +64,10 @@
     <input type="checkbox" id="isDeleted" th:field="*{student.deleted}" />
   </div>
 
-  <div>
-    <label for="course">受講コース名:</label>
-    <select id="course" th:field="*{student.course}" required>
-      <option value="" disabled>選択してください</option>
-      <option th:each="course : ${courseList}"
-              th:value="${course.name}"
-              th:text="${course.name}"
-       th:selected="${course.name == studentDetail.student.course}">
-      </option>
-    </select>
+  <div th:each="course, stat : *{studentCourses}">
+    <label for="course"  th:for="studentCourse.__${stat.index}__name">受講コース名: </label>
+    <input type="text" id = "name" th:id="studentCourse.__${stat.index}__.name"
+      th:field="*{studentCourses[__${stat.index}__].name}">
   </div>
 
   <div>

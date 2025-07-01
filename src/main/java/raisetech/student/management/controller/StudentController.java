@@ -38,23 +38,18 @@ public class StudentController {
         return "studentList";
     }
 
-    @GetMapping("/studentsCourseList")
-    public List<StudentsCourses> getStudentsCourseList() {
-        return service.searchStudentsCoursesList();
-    }
-
     @GetMapping("/newStudent")
     public String newStudent(Model model) {
         model.addAttribute("studentDetail", new StudentDetail());
         return "registerStudent";
     }
 
-    @GetMapping("/updateStudent/{id}")
+    @GetMapping("/Student/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // 生徒情報の取得
         Student student = service.findStudentById(id);
         // 登録済み情報を StudentDetail に格納
-        StudentDetail studentDetail = new StudentDetail();
+        StudentDetail studentDetail = service.findStudent(id);
         studentDetail.setStudent(student);
         studentDetail.setStudentsCourses(service.searchStudentsCoursesList()); // 必要に応じて
         // フォームで使用するオブジェクトとコース一覧をViewに渡す
@@ -82,6 +77,7 @@ public class StudentController {
     //  コース情報も一緒に登録できるように実装する。コースは単体で良い。
         return "redirect:studentList";
     }
+
     @PostMapping("/updateStudent")
     public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
         if (result.hasErrors()) {
