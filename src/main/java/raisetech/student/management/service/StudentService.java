@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import raisetech.student.management.data.Student;
 import raisetech.student.management.data.StudentsCourses;
 import raisetech.student.management.repository.StudentRepository;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -22,21 +22,23 @@ public class StudentService {
         return repository.searchStudent();
     }
 
-    public List<Student> searchStudentsInThirties() {
-        List<Student> allStudents = repository.searchStudent();
-        return allStudents.stream()
-                .filter(student -> student.getAge() >= 30 && student.getAge() <= 39)
-                .collect(Collectors.toList());
-    }
-
     public  List<StudentsCourses> searchStudentsCoursesList() {
         return repository.searchStudentsCourses();
     }
 
-    public List<StudentsCourses> searchJavaCourses() {
-        List<StudentsCourses> allCourses = repository.searchStudentsCourses();
-        return allCourses.stream()
-                .filter(course -> "JavaCourse".equals(course.getName()))
-                .collect(Collectors.toList());
+    public void registerStudent(Student student) {repository.insertStudent(student); }
+
+    public void registerStudentandCourse(Student student) {
+        repository.insertStudent(student);
+
+        if (student.getCourseName() != null && !student.getCourseName().isEmpty()) {
+            StudentsCourses sc = new StudentsCourses();
+            sc.setStudentId(student.getId());
+            sc.setName(student.getCourseName());
+            sc.setStartingDate(LocalDateTime.now());
+            sc.setAssuredFinishingDate(LocalDateTime.now().plusMonths(3)); // 仮に3ヶ月後
+
+            repository.insertStudentCourse(sc);
+        }
     }
 }
