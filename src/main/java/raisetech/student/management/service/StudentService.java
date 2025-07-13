@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raisetech.student.management.data.Student;
-import raisetech.student.management.data.StudentsCourses;
+import raisetech.student.management.data.StudentCourses;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.repository.StudentRepository;
 import java.time.LocalDateTime;
@@ -21,20 +21,20 @@ public class StudentService {
     }
 
     public List<Student> searchStudentList() {
-        return repository.searchStudent();
+        return repository.findAllStudent();
     }
 
-    public StudentDetail searchStudent(Integer id) {
-        Student student = repository.searchStudent(id);
-        List<StudentsCourses> studentsCourses = repository.searchStudentsCourses(student.getId());
-        StudentDetail.StudentDetail = new StudentDetail();
-        studentDetail.setstudent(student);
-        studentDetail.setstudentCourses(studentsCourses);
+    public StudentDetail findStudent(Integer id) {
+        Student student = repository.findStudentById(id);
+        List<StudentCourses> studentCourses = repository.searchStudentCourses(student.getId());
+        StudentDetail studentDetail = new StudentDetail();
+        studentDetail.setStudent(student);
+        studentDetail.setStudentCourses(studentCourses);
         return studentDetail;
     }
 
-    public  List<StudentsCourses> searchStudentsCoursesList() {
-        return repository.searchStudentsCoursesList();
+    public  List<StudentCourses> searchStudentCoursesList() {
+        return repository.searchStudentCoursesList();
     }
 
     public void registerStudent(Student student) {repository.insertStudent(student); }
@@ -43,32 +43,32 @@ public class StudentService {
         repository.insertStudent(student);
 
         if (student.getCourse() != null && !student.getCourse().isEmpty()) {
-            StudentsCourses sc = new StudentsCourses();
+            StudentCourses sc = new StudentCourses();
             sc.setStudentId(student.getId());
             sc.setName(student.getCourse());
             sc.setStartingDate(LocalDateTime.now());
-            sc.setAssuredFinishingDate(LocalDateTime.now().plusMonths(3)); // 仮に3ヶ月後
+            sc.setAssuredFinishingDate(LocalDateTime.now().plusMonths(3));
 
             repository.insertStudentCourse(sc);
         }
     }
 
     public Student findStudentById(Integer id) {
-        return repository.findById(id);
+        return repository.findById(id).orElse(null) ;
     }
 
     @Transactional
-    public void updateStudent(Student student) {
+    public void updateStudent(StudentDetail studentDetail) {
+        Student student = studentDetail.getStudent();
         repository.updateStudent(student);
-    }
 
-        if (student.getCourse() != null && !student.getCourse().isEmpty()) {
-            StudentsCourses sc = new StudentsCourses();
-            sc.setStudentId(student.getId());
-            sc.setName(student.getCourse());
-            sc.setStartingDate(LocalDateTime.now());
-            sc.setAssuredFinishingDate(LocalDateTime.now().plusMonths(3)); // 仮に3ヶ月後
-
-            repository.updateStudentCourse(sc);
+        List<StudentCourses> courseList = studentDetail.getStudentCourses();
+        if (courseList != null) {
+            for (StudentCourses sc : courseList) {
+                if (sc.getId() != null) {
+                    repository.updateStudentCourse(sc);
+                }
+            }
         }
     }
+}

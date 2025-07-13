@@ -14,10 +14,22 @@
   </style>
 </head>
 <body>
+
 <h1>受講生詳細</h1>
 
 <form th:action="@{/updateStudent}" th:object="${studentDetail}" method="post">
-  <input type="hidden" th:field="*{student.id}" />
+
+  <div>
+      <label> </label>
+      <span th:if="*{student != null}" th:text="*{student.name}">表示される氏名</span>
+  </div>
+
+  <br />
+
+  <div>
+      <label for="name">ID:</label>
+      <input type="text" id="id" th:field="*{student.id}" readonly />
+  </div>
 
   <div>
     <label for="name">氏名:</label>
@@ -65,14 +77,20 @@
   </div>
 
   <div th:each="course, stat : *{studentCourses}">
-    <label for="course"  th:for="studentCourse.__${stat.index}__name">受講コース名: </label>
-    <input type="text" id = "name" th:id="studentCourse.__${stat.index}__.name"
-      th:field="*{studentCourses[__${stat.index}__].name}">
+    <label th:for="'course_id_' + ${stat.index}">受講コースID: </label>
+    <input type="hidden"
+           th:id = "'course_id_' + ${stat.index}"
+           th:field="*{studentCourses[__${stat.index}__].id}" readonly/>
+    <label th:for="'course_name_' + ${stat.index}">受講コース名: </label>
+    <input type="text"
+           th:id = "'course_name_' + ${stat.index}"
+           th:field="*{studentCourses[__${stat.index}__].name}"/>
   </div>
 
   <div>
     <button type="submit">更新</button>
   </div>
+
 </form>
 
 </body>
