@@ -9,3 +9,8 @@
 /.lock/
 /.class/
 /gradle/
+.bin
+.jar
+.log
+.probe
+.DS_Store
