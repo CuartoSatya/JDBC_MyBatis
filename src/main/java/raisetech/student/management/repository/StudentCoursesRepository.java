@@ -2,13 +2,13 @@ package raisetech.student.management.repository;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import raisetech.student.management.data.StudentsCourses;
+import raisetech.student.management.data.StudentCourses;
 
 import java.util.List;
 
     @Mapper
-    public interface StudentsCoursesRepository {
+    public interface StudentCoursesRepository {
         @Select("SELECT id, student_id AS studentId, name, starting_date AS startingDate, assured_finishing_date " +
-                "AS assuredFinishingDate FROM students_courses")
-        List<StudentsCourses> searchAll();
+                "AS assuredFinishingDate FROM student_courses")
+        List<StudentCourses> searchAll();
     }
