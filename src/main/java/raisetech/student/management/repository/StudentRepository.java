@@ -30,5 +30,4 @@ public interface StudentRepository {
     @Insert("INSERT INTO student_courses (student_id, name, starting_date, assured_finishing_date) " +
             "VALUES (#{studentId}, #{name}, #{startingDate}, #{assuredFinishingDate})")
     void insertStudentCourse(StudentsCourses sc);
-
 }
