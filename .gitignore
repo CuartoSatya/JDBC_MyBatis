@@ -1,11 +1,16 @@
 # デフォルトの無視対象ファイル
-/.idea/
-/workspace.xml
-/.gradle/
-/build/
-/out/
+.idea/
+workspace.xml
+.gradle/
+build/
+out/
 *.iml
-/target/
-/.lock/
-/.class/
-/gradle/
+target/
+.lock/
+.class/
+gradle/
+.bin
+.jar
+.log
+.probe
+.DS_Store
