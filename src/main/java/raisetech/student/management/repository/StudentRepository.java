@@ -3,32 +3,35 @@ package raisetech.student.management.repository;
 import org.apache.ibatis.annotations.*;
 import org.springframework.transaction.annotation.Transactional;
 import raisetech.student.management.data.Student;
-import raisetech.student.management.data.StudentsCourses;
+import raisetech.student.management.data.StudentCourses;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface StudentRepository {
 
     @Transactional
-    @Select("SELECT id_student AS id, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, " +
-            "address, age, sex, remark, deleted, course FROM student WHERE id_student = #{id}")
-    Student findById(@Param("id") Integer id);
-
-    void updateStudent(Student student);
 
     @Select("SELECT id_student AS id, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, " +
-            "address, age, sex, remark, deleted FROM student")
-    List<Student> searchStudent();
+            "address, age, sex, remark, deleted FROM student WHERE deleted = false")
+    List<Student> findAllStudent();
+
+    @Select("SELECT id_student AS id, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, " +
+            "address, age, sex, remark, deleted FROM student WHERE id_student = #{id}")
+    Student findStudentById(Integer id);
 
     @Select("SELECT id, student_id AS studentId, name, starting_date AS startingDate, " +
             "assured_finishing_date AS assuredFinishingDate FROM student_courses")
-    List<StudentsCourses> searchStudentsCoursesList();
+    List<StudentCourses> searchStudentCoursesList();
 
     @Select("SELECT id, student_id AS studentId, name, starting_date AS startingDate, " +
             "assured_finishing_date AS assuredFinishingDate FROM student_courses WHERE student_id = #{studentId}")
-    List<StudentsCourses> searchStudentsCourses(Integer studentId);
+    List<StudentCourses> searchStudentCourses(Integer studentId);
 
+    @Select("SELECT id_student AS id, name, kana_name AS kanaName, nickname, mail_address AS mailAddress, " +
+            "address, age, sex, remark, deleted FROM student WHERE id_student = #{id}")
+    Optional<Student> findById(Integer id);
 
     @Insert("INSERT INTO student (name, kana_name, nickname, mail_address, address, age, sex, remark, deleted) " +
             "VALUES (#{name}, #{kanaName}, #{nickname}, #{mailAddress}, #{address}, #{age}, #{sex}, #{remark}," +
@@ -42,15 +45,15 @@ public interface StudentRepository {
 
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id_student")
 
-    void insertStudentCourse(StudentsCourses sc);
+    void insertStudentCourse(StudentCourses sc);
 
-    @Update("UPDATE student SET(name = #{name}, kana_name = #{kanaName}, nickname = #{nickname}, mail_address = " +
-            "#{mailAddress}, address = #{address}, age = #{age}, sex = #{sex}, remark = #{remark}, deleted = #{deleted})" +
-            "WHERE id = #{id}")
+    @Update("UPDATE student SET name = #{name}, kana_name = #{kanaName}, nickname = #{nickname}, " +
+            "mail_address = #{mailAddress}, address = #{address}, age = #{age}, sex = #{sex}, remark = #{remark}, " +
+            "deleted = #{deleted} WHERE id_student = #{id}")
 
     void updateStudent(Student student);
 
-    @Update("UPDATE student_courses SET(name = #{name}) WHERE id = #{id}")
-    void updateStudentCourse(StudentsCourses sc);
-
+    @Update("UPDATE student_courses SET name = #{name}, starting_date = #{startingDate}, assured_finishing_date = " +
+            "#{assuredFinishingDate} WHERE id = #{id}")
+    void updateStudentCourse(StudentCourses sc);
 }

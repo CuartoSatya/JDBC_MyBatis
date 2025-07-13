@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class StudentsCourses {
+public class StudentCourses {
 
-    private int id;
-    private int studentId;
+    private Integer id;
+    private Integer studentId;
     private String name;
     private LocalDateTime startingDate;
     private LocalDateTime assuredFinishingDate;
