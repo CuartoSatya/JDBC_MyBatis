@@ -1,16 +1,17 @@
 # デフォルトの無視対象ファイル
-.idea/
-workspace.xml
-.gradle/
-build/
-out/
+/shelf/
+/workspace.xml
+# 環境に依存する Maven ホームディレクトリのパス
+/mavenHomeManager.xml
+
+/.gradle/
+/build/
+/out/
+/.idea/
 *.iml
-target/
-*.lock/
-*.class/
-gradle/
-*.bin
+*.class
 *.jar
+*.bin
 *.log
 *.probe
-.DS_Store
+*.DS_Store
