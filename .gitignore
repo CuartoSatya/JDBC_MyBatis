@@ -40,4 +40,5 @@ out/
 ### VS Code ###
 .vscode/
 
+### Repository in GitHub ###
 JDBC_MyBatis
