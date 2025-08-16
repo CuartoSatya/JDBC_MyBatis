@@ -4,7 +4,7 @@
 .gradle
 .out
 
-HELP.md
+JDBC_MyBatis/HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
