@@ -2,6 +2,7 @@ package raisetech.student.management;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import raisetech.student.management.data.StudentsCourses;
 
 import java.util.List;
 
