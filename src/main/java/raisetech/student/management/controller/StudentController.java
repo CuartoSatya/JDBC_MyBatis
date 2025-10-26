@@ -35,6 +35,28 @@ public class StudentController {
         return "studentList";
     }
 
+    @GetMapping("/Student/{id}")
+    public String showUpdateForm(@PathVariable("id") Integer id) {
+        StudentDetail studentDetail = service.findStudent(id);
+        if (studentDetail == null || studentDetail.getStudent() == null) {
+            return "error";
+        }
+        Student student = studentDetail.getStudent();
+        System.out.println("▼ 確認ログ ▼");
+        System.out.println("student = " + student);
+        System.out.println("student.getName() = " + student.getName());
+        System.out.println("student.getKanaName() = " + student.getKanaName());
+        System.out.println("student.getMailAddress() = " + student.getMailAddress());
+        return "updateStudent";
+    }
+
+    @GetMapping("/student/{id}")
+    public String getStudent(@PathVariable Integer id,Model model) {
+        StudentDetail studentDetail = service.findStudent(id);
+        model.addAttribute("studentDetail", studentDetail);
+        return "updateStudent";
+    }
+
     @GetMapping("/newStudent")
     public String newStudent(Model model) {
         model.addAttribute("studentDetail", new StudentDetail());
