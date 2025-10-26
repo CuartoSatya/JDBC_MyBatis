@@ -72,18 +72,4 @@ public class StudentService {
             }
         }
     }
-
-//    @Transactional
-//    public void updateStudent(Student student) {
-//        repository.updateStudent(student);
-
-//        if (student.getCourse() != null && !student.getCourse().isEmpty()) {
-//            StudentCourses sc = new StudentCourses();
-//            sc.setStudentId(student.getId());
-//            sc.setName(student.getCourse());
-//            sc.setStartingDate(LocalDateTime.now());
-//            sc.setAssuredFinishingDate(LocalDateTime.now().plusMonths(3)); // 仮に3ヶ月後
-//            repository.updateStudentCourse(sc);
-//        }
-//    }
 }

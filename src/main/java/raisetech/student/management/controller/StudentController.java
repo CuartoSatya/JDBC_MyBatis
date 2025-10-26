@@ -35,11 +35,38 @@ public class StudentController {
         return "studentList";
     }
 
+    @GetMapping("/Student/{id}")
+    public String showUpdateForm(@PathVariable("id") Integer id) {
+        // 生徒情報の取得
+        StudentDetail studentDetail = service.findStudent(id);
+        if (studentDetail == null || studentDetail.getStudent() == null) {
+            return "error"; // IDに該当する生徒が存在しない
+        }
+        // 登録済み情報を StudentDetail に格納
+        Student student = studentDetail.getStudent();
+        System.out.println("▼ 確認ログ ▼");
+        System.out.println("student = " + student);// studentがnullでないか
+        System.out.println("student.getName() = " + student.getName());
+        System.out.println("student.getKanaName() = " + student.getKanaName());
+        System.out.println("student.getMailAddress() = " + student.getMailAddress());
+        return "updateStudent";
+    }
+
     @GetMapping("/newStudent")
     public String newStudent(Model model) {
         model.addAttribute("studentDetail", new StudentDetail());
         return "registerStudent";
     }
+
+    // @GetMapping("/studentDetail/{id}")
+    // public String showStudentDetail(@PathVariable Integer id, Model model) {
+    //    Student student = service.findStudentById(id);
+    //    if (student == null) {
+    //        return "error"; // 存在しないIDに対するエラーページ（任意）
+    //    }
+    //    model.addAttribute("student", student);
+    //    return "studentDetail";
+    //}
 
     @PostMapping("/registerStudent")
     public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
