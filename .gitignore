@@ -20,6 +20,13 @@ bin/
 ### IntelliJ IDEA ###
 .idea
 *.iws
+# デフォルトの無視対象ファイル
+!build.gradle
+.idea/
+/workspace.xml
+.gradle/
+/build/
+/out/
 *.iml
 *.ipr
 *.jar
@@ -42,3 +49,14 @@ out/
 
 ### Repository in GitHub ###
 JDBC_MyBatis
+/target/
+gradle/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+/.idea/
+/.gradle/
+**/build/
+*.class

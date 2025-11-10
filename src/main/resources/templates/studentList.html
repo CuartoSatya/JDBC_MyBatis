@@ -21,6 +21,22 @@
         <th>退会の有無</th>
     </tr>
     </thead>
+    <tbody>
+    <tr th:each="student : ${studentList}">
+        <td th:text="${student.student.id}"></td>
+        <td>
+            <a href="/studentList" th:href="@{/Student/{id}(id=${student.student.id})}" th:text="${student.student.name}"></a>
+        </td>
+        <td th:text="${student.student.kanaName}"></td>
+        <td th:text="${student.student.nickname}"></td>
+        <td th:text="${student.student.mailAddress}"></td>
+        <td th:text="${student.student.address}"></td>
+        <td th:text="${student.student.age}"></td>
+        <td th:text="${student.student.sex}"></td>
+        <td th:text="${student.student.remark}"></td>
+        <td th:text="${student.student.deleted}"></td>
+    </tr>
+    </tbody>
 </table>
 </body>
 </html>

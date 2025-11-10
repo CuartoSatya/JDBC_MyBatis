@@ -1,15 +1,14 @@
 package raisetech.student.management.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import raisetech.student.management.controller.converter.StudentConverter;
 import raisetech.student.management.data.Student;
-import raisetech.student.management.data.StudentsCourses;
+import raisetech.student.management.data.StudentCourses;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.service.StudentService;
 
@@ -29,17 +28,33 @@ public class StudentController {
 
     @GetMapping("/studentList")
     public String getStudentList(Model model) {
-        // リクエストの加工処理、入力チェックとか
         List<Student> students = service.searchStudentList();
-        List<StudentsCourses> studentsCourses = service.searchStudentsCoursesList();
+        List<StudentCourses> studentCourses = service.searchStudentCoursesList();
 
-        model.addAttribute("studentList", converter.convertStudentDetails(students, studentsCourses));
+        model.addAttribute("studentList", converter.convertStudentDetails(students, studentCourses));
         return "studentList";
     }
 
-    @GetMapping("/studentsCourseList")
-    public List<StudentsCourses> getStudentsCourseList() {
-        return service.searchStudentsCoursesList();
+    @GetMapping("/Student/{id}")
+    public String showUpdateForm(@PathVariable("id") Integer id) {
+        StudentDetail studentDetail = service.findStudent(id);
+        if (studentDetail == null || studentDetail.getStudent() == null) {
+            return "error";
+        }
+        Student student = studentDetail.getStudent();
+        System.out.println("▼ 確認ログ ▼");
+        System.out.println("student = " + student);
+        System.out.println("student.getName() = " + student.getName());
+        System.out.println("student.getKanaName() = " + student.getKanaName());
+        System.out.println("student.getMailAddress() = " + student.getMailAddress());
+        return "updateStudent";
+    }
+
+    @GetMapping("/student/{id}")
+    public String getStudent(@PathVariable Integer id,Model model) {
+        StudentDetail studentDetail = service.findStudent(id);
+        model.addAttribute("studentDetail", studentDetail);
+        return "updateStudent";
     }
 
     @GetMapping("/newStudent")
@@ -54,7 +69,12 @@ public class StudentController {
             return "registerStudent";
         }
         service.registerStudentandCourse(studentDetail.getStudent());
-    //  コース情報も一緒に登録できるように実装する。コースは単体で良い。
         return "redirect:studentList";
+    }
+
+    @PostMapping("/updateStudent")
+    public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
+        service.updateStudent(studentDetail);
+        return ResponseEntity.ok("Update success");
     }
 }
