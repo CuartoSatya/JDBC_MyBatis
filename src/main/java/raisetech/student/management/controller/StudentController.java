@@ -1,6 +1,6 @@
 package raisetech.student.management.controller;
 
-import jakarta.validation.Valid;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import raisetech.student.management.controller.converter.StudentConverter;
 import raisetech.student.management.domain.StudentDetail;
+import raisetech.student.management.exception.TestException;
 import raisetech.student.management.service.StudentService;
 import java.util.stream.Collectors;
 import org.springframework.validation.BindingResult;
@@ -44,9 +45,9 @@ public class StudentController {
      * @return 受講生詳細一覧（全件）
      */
     @GetMapping("/studentList")
-    public ResponseEntity<List<StudentDetail>> getStudentList() {
+    public ResponseEntity<List<StudentDetail>> getStudentList() throws TestException {
         List<StudentDetail> studentList = service.searchStudentList();
-        return ResponseEntity.ok(studentList);
+        throw new TestException("Now, This API isn't available. Please use URL 'students', don't use 'studentList'.");
     }
 
     /**
@@ -68,6 +69,12 @@ public class StudentController {
     @ResponseBody
     public StudentDetail getStudentJson(@PathVariable("id") @Min(1) @Max(100) Integer id) {
         return service.findStudent(id);
+    }
+
+    @GetMapping("/error")
+    public ResponseEntity<String> throwError() {
+        // RuntimeException を意図的に投げる
+        throw new RuntimeException("意図的な Runtime エラーです");
     }
 
     /**

@@ -121,4 +121,15 @@
         assured_finishing_date = #{assuredFinishingDate}
         WHERE id = #{id}
     </update>
+
+    <!-- ⑦ 学生コース全件検索 -->
+    <select id="searchStudentCourseList"
+        resultType="raisetech.student.management.data.StudentCourse">
+        SELECT id,
+        student_id AS studentId,
+        name,
+        starting_date AS startingDate,
+        assured_finishing_date AS assuredFinishingDate
+        FROM student_courses
+    </select>
 </mapper>
