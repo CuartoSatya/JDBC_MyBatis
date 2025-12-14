@@ -21,9 +21,10 @@ bin/
 .idea
 *.iws
 # デフォルトの無視対象ファイル
-/.idea/
+!build.gradle
+.idea/
 /workspace.xml
-/.gradle/
+.gradle/
 /build/
 /out/
 *.iml
@@ -50,3 +51,12 @@ out/
 JDBC_MyBatis
 /target/
 gradle/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+/.idea/
+/.gradle/
+**/build/
+*.class
