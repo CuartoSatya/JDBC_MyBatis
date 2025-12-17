@@ -1,12 +1,12 @@
 plugins {
 	id 'java'
 	id 'war'
-	id 'org.springframework.boot' version '3.4.1'
+	id 'org.springframework.boot' version '3.4.5'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'raisetech.student'
-version = '0.0.1-SNAPSHOT'
+group = 'raisetech.student.management'
+version = '1.0.0'
 sourceCompatibility = '21'
 
 java {
@@ -30,19 +30,25 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	// Thymeleaf
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.4.5'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	// Validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// OpenAPI Genarator
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
+
 	// 便利機能、ユーティリティ
 	implementation 'org.apache.commons:commons-lang3:3.17.0'
+
 	// LomBok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
 	// MySQLドライバ
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'mysql:mysql-connector-java:8.0.33'
+
 	// MyBatis
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
