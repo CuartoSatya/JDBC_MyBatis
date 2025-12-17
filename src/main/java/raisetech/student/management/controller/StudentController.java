@@ -1,22 +1,22 @@
 package raisetech.student.management.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import raisetech.student.management.controller.converter.StudentConverter;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.exception.TestException;
 import raisetech.student.management.service.StudentService;
-import java.util.stream.Collectors;
-import org.springframework.validation.BindingResult;
-
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 受講生の検索や登録、更新などを行うREST APIとして実行されるControllerです。
@@ -42,6 +42,7 @@ public class StudentController {
      *
      * @return 受講生詳細一覧（全件）
      */
+    @Operation(summary = "SearchInTheStudntList", description = "ToSearchInTheStudentList")
     @GetMapping("/studentList")
     public ResponseEntity<List<StudentDetail>> getStudentList() throws TestException {
         List<StudentDetail> studentList = service.searchStudentList();
@@ -63,6 +64,7 @@ public class StudentController {
         return "updateStudent";
     }
 
+    @Operation(summary = "Get student by ID", description = "Fetch a student’s information by their ID")
     @GetMapping(value = "/api/student/{id}", produces = "application/json")
     @ResponseBody
     public StudentDetail getStudentJson(@PathVariable("id") @Min(1) @Max(100) Integer id) {
@@ -72,15 +74,16 @@ public class StudentController {
     @GetMapping("/error")
     public ResponseEntity<String> throwError() {
         // RuntimeException を意図的に投げる
-        throw new RuntimeException("意図的な Runtime エラーです");
+        throw new RuntimeException("Designated Runtime error");
     }
 
     /**
      * 受講生詳細の登録を行います。
      *
-     * @param studentDetail
+     * @param studentDetail 受講生詳細
      * @return
      */
+    @Operation(summary = "RegisterStudent", description = "To　Resister　StudentInfomations")
     @PostMapping(value = "/registerStudent", consumes = "application/json", produces = "application/json")
     public ResponseEntity<List<String>> registerStudent
         (@RequestBody @Validated StudentDetail studentDetail, BindingResult result) {
@@ -100,6 +103,7 @@ public class StudentController {
      * @param studentDetail 受講生詳細
      * @return 実行結果
      */
+    @Operation(summary = "Update student", description = "Update student and course information")
     @PutMapping(value = "/updateStudent", consumes = "application/json")
     public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
         service.updateStudent(studentDetail);
