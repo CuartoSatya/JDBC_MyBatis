@@ -5,14 +5,12 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import raisetech.student.management.controller.converter.StudentConverter;
 import raisetech.student.management.domain.StudentDetail;
-import raisetech.student.management.exception.TestException;
 import raisetech.student.management.service.StudentService;
 
 import java.util.List;
@@ -21,8 +19,9 @@ import java.util.stream.Collectors;
 /**
  * 受講生の検索や登録、更新などを行うREST APIとして実行されるControllerです。
  */
+@RestController
+@RequestMapping("/api")
 @Validated
-@Controller
 public class StudentController {
 
     /** 受講生サービス
@@ -44,9 +43,11 @@ public class StudentController {
      */
     @Operation(summary = "SearchInTheStudntList", description = "ToSearchInTheStudentList")
     @GetMapping("/studentList")
-    public ResponseEntity<List<StudentDetail>> getStudentList() throws TestException {
+    public ResponseEntity<List<StudentDetail>> getStudentList() {
+        System.out.println("getStudentList() called");
         List<StudentDetail> studentList = service.searchStudentList();
-        throw new TestException("Now, This API isn't available. Please use URL 'students', don't use 'studentList'.");
+        System.out.println("Returned studentList size: " + studentList.size());
+        return ResponseEntity.ok(studentList);
     }
 
     /**
@@ -57,7 +58,7 @@ public class StudentController {
      * @param model
      * @return 受講生
      */
-    @GetMapping("/student/{id}")
+    @GetMapping("/student/html/{id}")
     public String getStudent(@PathVariable Integer id,Model model) {
         StudentDetail studentDetail = service.findStudent(id);
         model.addAttribute("studentDetail", studentDetail);
@@ -65,16 +66,13 @@ public class StudentController {
     }
 
     @Operation(summary = "Get student by ID", description = "Fetch a student’s information by their ID")
-    @GetMapping(value = "/api/student/{id}", produces = "application/json")
-    @ResponseBody
-    public StudentDetail getStudentJson(@PathVariable("id") @Min(1) @Max(100) Integer id) {
-        return service.findStudent(id);
-    }
-
-    @GetMapping("/error")
-    public ResponseEntity<String> throwError() {
-        // RuntimeException を意図的に投げる
-        throw new RuntimeException("Designated Runtime error");
+    @GetMapping(value = "/student/{id}", produces = "application/json")
+    public ResponseEntity<StudentDetail> getStudentJson(@PathVariable("id") @Min(1) @Max(100) Integer id) {
+        System.out.println("getStudentJson() called with id = " + id);
+        StudentDetail detail = service.findStudent(id);
+        System.out.println("Retrieved student name = " + detail.getStudent().getName());
+        return ResponseEntity.ok(detail);
+//        return service.findStudent(id);
     }
 
     /**
@@ -85,15 +83,32 @@ public class StudentController {
      */
     @Operation(summary = "RegisterStudent", description = "To　Resister　StudentInfomations")
     @PostMapping(value = "/registerStudent", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<List<String>> registerStudent
-        (@RequestBody @Validated StudentDetail studentDetail, BindingResult result) {
+    public ResponseEntity<List<String>> registerStudent(
+            @Validated StudentDetail studentDetail, BindingResult result) {
+
+        System.out.println("registerStudent() called");
+        System.out.println("Student name: " + studentDetail.getStudent().getName());
+
         if (result.hasErrors()) {
+            System.out.println("Validation errors:");
+
+            result.getFieldErrors().forEach(e ->
+                    System.out.println(" - " + e.getField() + ": " + e.getDefaultMessage())
+            );
+
             List<String> errors = result.getFieldErrors().stream()
                     .map(e -> e.getField() + ": " + e.getDefaultMessage())
                     .collect(Collectors.toList());
-        return ResponseEntity.badRequest().body(errors);
+
+            return ResponseEntity.badRequest().body(errors);
         }
+
+        System.out.println("Validation passed");
+        System.out.println("Calling service.registerStudentandCourse()");
+
         StudentDetail saved = service.registerStudentandCourse(studentDetail);
+
+        System.out.println("Saved student ID: " + saved.getStudent().getId());
         return ResponseEntity.ok(List.of("Registration success"));
     }
 
@@ -105,7 +120,7 @@ public class StudentController {
      */
     @Operation(summary = "Update student", description = "Update student and course information")
     @PutMapping(value = "/updateStudent", consumes = "application/json")
-    public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
+    public ResponseEntity<String> updateStudent(@Validated StudentDetail studentDetail) {
         service.updateStudent(studentDetail);
         return ResponseEntity.ok("Update success");
     }
