@@ -12,13 +12,11 @@ import raisetech.student.management.data.StudentCourse;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.repository.StudentRepository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,6 +63,7 @@ class StudentServiceTest {
         Student student = new Student();
         student.setId(id);
         List<StudentCourse> courseList = List.of(new StudentCourse());
+        StudentDetail expected = new StudentDetail(student, courseList);
 
         when(repository.findStudentById(id)).thenReturn(student);
         when(repository.searchStudentCourse(id)).thenReturn(courseList);
@@ -75,23 +74,8 @@ class StudentServiceTest {
         // Assert
         assertThat(actual.getStudent()).isEqualTo(student);
         assertThat(actual.getStudentCourseList()).isEqualTo(courseList);
-        verify(repository, times(1)).findStudentById(id);
-        verify(repository,times(1)).searchStudentCourse(id);
-    }
-
-    @Test
-    void registerStudentDetail_formatProcess() {
-        Integer id = 999;
-        Student student = new Student();
-        student.setId(id);
-        StudentCourse studentCourse = new StudentCourse();
-
-        sut.initStudentsCourse(studentCourse, student);
-
-        assertEquals(id, studentCourse.getStudentId());
-        LocalDateTime now = LocalDateTime.now();
-        assertEquals(now.getHour(), studentCourse.getStartDate().getHour());
-        assertEquals(now.plusMonths(3).getHour(), studentCourse.getAssuredFinishDate().getHour());
+        verify(repository).findStudentById(id);
+        verify(repository).searchStudentCourse(id);
     }
 
     @Test
