@@ -69,7 +69,9 @@ public class StudentService {
         repository.insertStudent(student);
         Integer studentId = student.getId();
         List<StudentCourse> courseList = studentDetail.getStudentCourseList();
-        if (courseList != null && !courseList.isEmpty()) {
+        if (courseList == null || courseList.isEmpty()) {
+            System.out.println("Course list is null or empty. No course will be registered.");
+        } else {
             for (StudentCourse studentsCourse : courseList) {
                 // JSON の studentId を信頼せず、必ず DB発番のIDをセット
                 studentsCourse.setStudentId(studentId);
@@ -95,8 +97,8 @@ public class StudentService {
         LocalDateTime now = LocalDateTime.now();
 
         studentsCourse.setStudentId(student.getId());
-        studentsCourse.setStartingDate(now);
-        studentsCourse.setAssuredFinishingDate(now.plusMonths(3));
+        studentsCourse.setStartDate(now);
+        studentsCourse.setAssuredFinishDate(now.plusMonths(3));
     }
 
     public Student findStudentById(Integer id) {

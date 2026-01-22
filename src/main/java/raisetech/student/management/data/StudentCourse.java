@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 @Setter
 public class StudentCourse {
 
-
     private Integer id;
     private Integer studentId;
     private String name;
-    private LocalDateTime startingDate;
-    private LocalDateTime assuredFinishingDate;
+    private LocalDateTime startDate;
+    private LocalDateTime assuredFinishDate;
 }

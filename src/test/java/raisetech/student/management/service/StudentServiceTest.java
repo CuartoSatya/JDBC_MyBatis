@@ -1,5 +1,6 @@
 package raisetech.student.management.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -129,8 +130,8 @@ class StudentServiceTest {
         sut.updateStudent(input);
 
         // Assert
-        verify(repository).updateStudent(student);
-        verify(repository).updateStudentCourse(course1);
+        verify(repository, times(1)).updateStudent(student);
+        verify(repository, times(1)).updateStudentCourse(course1);
         verify(repository, never()).updateStudentCourse(course2);
     }
 
