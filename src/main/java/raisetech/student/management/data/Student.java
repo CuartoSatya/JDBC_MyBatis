@@ -12,8 +12,8 @@ import lombok.ToString;
 @ToString
 public class Student {
 
-    @NotNull
-    private Integer id;
+    private Integer numericId;
+    private @NotBlank String id;
 
     @NotBlank(message = "Input name is needed.")
     private String name;

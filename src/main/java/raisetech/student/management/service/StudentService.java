@@ -49,7 +49,7 @@ public class StudentService {
      */
     public StudentDetail findStudent(Integer id) {
         Student student = repository.findStudentById(id);
-        List<StudentCourse> studentCourse = repository.searchStudentCourse(student.getId());
+        List<StudentCourse> studentCourse = repository.searchStudentCourse(student.getNumericId());
         return new StudentDetail(student,studentCourse);
     }
 
@@ -67,7 +67,7 @@ public class StudentService {
         Student student = studentDetail.getStudent();
 
         repository.insertStudent(student);
-        Integer studentId = student.getId();
+        Integer studentId = student.getNumericId();
         List<StudentCourse> courseList = studentDetail.getStudentCourseList();
         if (courseList == null || courseList.isEmpty()) {
             System.out.println("Course list is null or empty. No course will be registered.");
@@ -96,7 +96,7 @@ public class StudentService {
     void initStudentsCourse(StudentCourse studentsCourse, Student student) {
         LocalDateTime now = LocalDateTime.now();
 
-        studentsCourse.setStudentId(student.getId());
+        studentsCourse.setStudentId(student.getNumericId());
         studentsCourse.setStartDate(now);
         studentsCourse.setAssuredFinishDate(now.plusMonths(3));
     }

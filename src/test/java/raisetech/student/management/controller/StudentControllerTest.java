@@ -43,7 +43,7 @@ class StudentControllerTest {
     @WithMockUser(username = "test", roles = {"USER"})
     void 受講生詳細の受講生で適切な値を入力した時に入力チェックに異常が発生しないこと () throws Exception {
         Student student = new Student();
-        student.setId(8);
+        student.setId("8");
         student.setName("Taro");
         student.setKanaName("タロウ");
         student.setSex("1");
@@ -66,7 +66,7 @@ class StudentControllerTest {
     // 2. GET /studentList のテスト
     @Test
     @WithMockUser
-    void 受講生詳細の検索が実行できて空のリストが返ってくること() throws Exception {
+    void 受講生詳細の一覧検索が実行できて空のリストが返ってくること() throws Exception {
         when(mockService.searchStudentList()).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/api/studentList"))
@@ -75,19 +75,30 @@ class StudentControllerTest {
 
         verify(mockService, times(1)).searchStudentList();
     }
+    @Test
+    @WithMockUser
+    void 受講生詳細の受講生でidに数字以外を用いた際に入力チェックに掛かること() throws Exception {
+        String id = "abc";
+        when(mockService.searchStudentList()).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/api/student/{id}", id))
+                .andExpect(status().isBadRequest());
+
+        verify(mockService, never()).findStudent(anyInt());
+    }
 
     // 3. バリデーションエラーテスト（直接呼び出し）
     @Test
     void 受講生詳細の受講生で性別に数字以外を用いた際に入力チェックに掛かること() {
         Student student = new Student();
-        student.setId(20);
-        student.setSex("It is a test.");
+        student.setId("20");
         student.setName("Shimomura Atomu");
         student.setKanaName("Simomura Atomu");
         student.setNickname("Atomu");
         student.setMailAddress("Atoms@lycos.co.jp");
         student.setAddress("Nagano");
         student.setAge(25);
+        student.setSex("It is a test.");
         student.setDeleted(false);
 
         Set<ConstraintViolation<Student>> violations = validator.validate(student);

@@ -1,8 +1,6 @@
 package raisetech.student.management.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -59,18 +57,24 @@ public class StudentController {
      * @return 受講生
      */
     @GetMapping("/student/html/{id}")
-    public String getStudent(@PathVariable Integer id,Model model) {
-        StudentDetail studentDetail = service.findStudent(id);
+    public String getStudent(@PathVariable String id,Model model) {
+        Integer numericId = Integer.valueOf(id);
+        StudentDetail studentDetail = service.findStudent(numericId);
+        model.addAttribute("studentDetail", studentDetail);
         model.addAttribute("studentDetail", studentDetail);
         return "updateStudent";
     }
 
     @Operation(summary = "Get student by ID", description = "Fetch a student’s information by their ID")
     @GetMapping(value = "/student/{id}", produces = "application/json")
-    public ResponseEntity<StudentDetail> getStudentJson(@PathVariable("id") @Min(1) @Max(100) Integer id) {
+    public ResponseEntity<StudentDetail> getStudentJson(@PathVariable String id) {
+        if (!id.matches("\\d+")) {System.out.println("Invalid student id received: " + id);
+            return ResponseEntity.badRequest().build();}
+        Integer numericId = Integer.valueOf(id);
         System.out.println("getStudentJson() called with id = " + id);
-        StudentDetail detail = service.findStudent(id);
+        StudentDetail detail = service.findStudent(numericId);
         System.out.println("Retrieved student name = " + detail.getStudent().getName());
+//        return ResponseEntity.ok(service.findStudent(numericId));
         return ResponseEntity.ok(detail);
 //        return service.findStudent(id);
     }
@@ -108,7 +112,7 @@ public class StudentController {
 
         StudentDetail saved = service.registerStudentandCourse(studentDetail);
 
-        System.out.println("Saved student ID: " + saved.getStudent().getId());
+        System.out.println("Saved student ID: " + saved.getStudent().getNumericId());
         return ResponseEntity.ok(List.of("Registration success"));
     }
 
