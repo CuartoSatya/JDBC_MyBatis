@@ -29,22 +29,28 @@ public class StudentRepositoryTest {
      */
     @Test
     void 受講生の登録が行えること() {
-        Student student = new Student();
-        student.setName("Shimomura Atomu");
-        student.setKanaName("Simomura Atomu");
-        student.setNickname("Atomu");
-        student.setMailAddress("Atoms@lycos.co.jp");
-        student.setAddress("Nagano");
-        student.setAge(25);
-        student.setSex("It is a test.");
-        student.setRemark("");
-        student.setCourse("GraphicCourse");
-        student.setDeleted(false);
+        Student student = new Student(
+                "A999",                     // id
+                "Shimomura Atomu",          // name
+                "Simomura Atomu",           // kanaName
+                "Atomu",                    // nickname
+                "Atoms@lycos.co.jp",        // mailAddress
+                "Nagano",                   // address
+                25,                         // age
+                "1",                        // sex
+                false,                      // deleted
+                "",                         // remark
+                "GraphicCourse"             // course
+        );
 
         sut.insertStudent(student);
 
         List<Student> actual = sut.findAllStudent();
-        assertThat(actual.size()).isEqualTo(7);
+
+        assertThat(actual).hasSize(7);
+        assertThat(actual)
+                .extracting(Student::getName)
+                .contains("Shimomura Atomu");
     }
 
     /**
@@ -83,7 +89,10 @@ public class StudentRepositoryTest {
     void 受講生コース情報の全件検索が行えること() {
         List<StudentCourse> actual = sut.searchStudentCourseList();
 
-        assertThat(actual).isNotEmpty();
+        assertThat(actual)
+                .hasSize(7)
+                .extracting(StudentCourse::getStudentId)
+                .contains(1);
     }
 
     /**
@@ -93,8 +102,13 @@ public class StudentRepositoryTest {
     void 受講生IDに紐づくコース情報が取得できること() {
         List<StudentCourse> actual = sut.searchStudentCourse(1);
 
-        assertThat(actual).isNotEmpty();
-        assertThat(actual.get(0).getStudentId()).isEqualTo(1);
+        StudentCourse expected = new StudentCourse();
+        expected.setStudentId(1);
+        expected.setName("AWScourse");
+        expected.setStartDate(null);
+        expected.setAssuredFinishDate(null);
+
+        assertThat(actual).contains(expected);
     }
 
     /**
