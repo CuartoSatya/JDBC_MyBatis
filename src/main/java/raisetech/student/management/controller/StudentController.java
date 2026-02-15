@@ -1,6 +1,7 @@
 package raisetech.student.management.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -8,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import raisetech.student.management.controller.converter.StudentConverter;
+import raisetech.student.management.data.Student;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.service.StudentService;
 
@@ -88,7 +90,8 @@ public class StudentController {
     @Operation(summary = "RegisterStudent", description = "To　Resister　StudentInfomations")
     @PostMapping(value = "/registerStudent", consumes = "application/json", produces = "application/json")
     public ResponseEntity<List<String>> registerStudent(
-            @Validated StudentDetail studentDetail, BindingResult result) {
+            @Valid @RequestBody raisetech.student.management.controller.dto.RegisterStudentRequest request,
+            StudentDetail studentDetail, BindingResult result) {
 
         System.out.println("registerStudent() called");
         System.out.println("Student name: " + studentDetail.getStudent().getName());
@@ -106,6 +109,22 @@ public class StudentController {
 
             return ResponseEntity.badRequest().body(errors);
         }
+
+        Student student = new Student(
+                request.getId(),
+                request.getName(),
+                request.getKanaName(),
+                request.getNickname(),
+                request.getMailAddress(),
+                request.getAddress(),
+                request.getAge(),
+                request.getSex(),
+                request.getDeleted(),
+                request.getRemark(),
+                request.getCourse()
+        );
+
+        service.registerStudent(student);
 
         System.out.println("Validation passed");
         System.out.println("Calling service.registerStudentandCourse()");

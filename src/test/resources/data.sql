@@ -16,8 +16,8 @@ VALUES ('Tanaka Taro','Tanaka Taro','Taro','TTallow@ymobile.ne.jp',
 
 INSERT INTO studentcourse (student_id,name,starting_date,assured_finishing_date)
 VALUES (2,'WEBdesigningCourse','2024-01-04','2025-02-12'),
-       (1,'AWScourse',NULL,NULL),
-       (3,'AWScourse','2024-01-14','2024-12-26'),
+       (1,'AwsCourse',NULL,NULL),
+       (3,'AwsCourse','2024-01-14','2024-12-26'),
        (3,'MarcketingCourse','2024-01-16','2025-01-25'),
        (4,'GraphicCourse','2024-03-25','2025-03-02'),
        (6,'JavaCourse','2025-10-01','2025-12-31'),
