@@ -8,44 +8,57 @@ import lombok.ToString;
 
 @Schema(description = "StudentInfomationDetail")
 @Getter
-@Setter
+@Setter   // 今は残してOK
 @ToString
 public class Student {
 
+    public Student() {
+    }
+
+    public Student(
+            String id,
+            String name,
+            String kanaName,
+            String nickname,
+            String mailAddress,
+            String address,
+            Integer age,
+            String sex,
+            Boolean deleted,
+            String remark,
+            String course
+    ) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("name must not be blank");
+        }
+
+        if (age == null || age < 10 || age > 120) {
+            throw new IllegalArgumentException("invalid age");
+        }
+
+        this.id = id;
+        this.name = name;
+        this.kanaName = kanaName;
+        this.nickname = nickname;
+        this.mailAddress = mailAddress;
+        this.address = address;
+        this.age = age;
+        this.sex = sex;
+        this.deleted = deleted;
+        this.remark = remark;
+        this.course = course;
+    }
+
     private Integer numericId;
-    private @NotBlank String id;
-
-    @NotBlank(message = "Input name is needed.")
+    private String id;
     private String name;
-
-    @NotBlank(message = "kanaName is needed.")
     private String kanaName;
-
-    @NotBlank
-    @Size(max = 20, message = "Nickname might have to be 20 letters or less.")
     private String nickname;
-
-    @NotBlank
-    @Email(message = "Input by correct form.")
     private String mailAddress;
-
-    @NotBlank(message = "address is needed.")
     private String address;
-
-    @NotNull
-    @Min(value = 10, message = "New student might become at least 10 years old.")
-    @Max(value = 120, message = "New student might be less than 120 years old.")
     private Integer age;
-
-    @NotBlank
-    @Pattern(regexp = "^([123])?$", message = "Select sex from figures 1 to 3.")
     private String sex;
-
-    @Size(max = 100, message = "Remark might have to be 100 letters or less.")
     private String remark;
-
     private String course;
-
-    @NotNull
     private Boolean deleted;
 }

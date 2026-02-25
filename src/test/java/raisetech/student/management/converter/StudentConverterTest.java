@@ -1,5 +1,6 @@
 package raisetech.student.management.converter;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import raisetech.student.management.controller.converter.StudentConverter;
 import raisetech.student.management.data.Student;
@@ -9,7 +10,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StudentConverterTest {
-    private final StudentConverter converter = new StudentConverter();
+    private StudentConverter converter;
+
+    @BeforeEach
+    void setUp() {
+        converter = new StudentConverter();
+    }
 
     @Test
     void convertStudentDetails_受講生と受講生コースが正しく紐づくこと() {
@@ -38,15 +44,12 @@ public class StudentConverterTest {
 
         // Assert（検証）
         assertThat(result).hasSize(2);
-
-        StudentDetail detail1 = result.get(0);
-        assertThat(detail1.getStudent()).isEqualTo(student1);
-        assertThat(detail1.getStudentCourseList()).hasSize(2);
-
-        StudentDetail detail2 = result.get(1);
-        assertThat(detail2.getStudent()).isEqualTo(student2);
-        assertThat(detail2.getStudentCourseList()).hasSize(1);
+        assertThat(result.get(0).getStudent()).isEqualTo(student1);
+        assertThat(result.get(0).getStudentCourseList()).hasSize(2);
+        assertThat(result.get(1).getStudent()).isEqualTo(student2);
+        assertThat(result.get(1).getStudentCourseList()).hasSize(1);
     }
+
    @Test
     void convertStudentDetails_受講生コースが存在しない場合は空リストになること() {
         Student student = new Student();

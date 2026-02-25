@@ -1,6 +1,7 @@
 package raisetech.student.management.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -8,11 +9,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import raisetech.student.management.controller.converter.StudentConverter;
+import raisetech.student.management.controller.dto.RegisterStudentRequest;
+import raisetech.student.management.data.Student;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.service.StudentService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 受講生の検索や登録、更新などを行うREST APIとして実行されるControllerです。
@@ -23,11 +25,11 @@ import java.util.stream.Collectors;
 public class StudentController {
 
     /** 受講生サービス
-    */
+     */
     private StudentService service;
 
     /**　コンストラクタ
-    */
+     */
     @Autowired
     public StudentController(StudentService service, StudentConverter converter) {
         this.service = service;
@@ -65,7 +67,7 @@ public class StudentController {
         return "updateStudent";
     }
 
-    @Operation(summary = "Get student by ID", description = "Fetch a student’s information by their ID")
+    @Operation(summary = "Get student by ID", description = "Fetch a student's information by their ID")
     @GetMapping(value = "/student/{id}", produces = "application/json")
     public ResponseEntity<StudentDetail> getStudentJson(@PathVariable String id) {
         if (!id.matches("\\d+")) {System.out.println("Invalid student id received: " + id);
@@ -85,13 +87,16 @@ public class StudentController {
      * @param studentDetail 受講生詳細
      * @return
      */
-    @Operation(summary = "RegisterStudent", description = "To　Resister　StudentInfomations")
-    @PostMapping(value = "/registerStudent", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<List<String>> registerStudent(
-            @Validated StudentDetail studentDetail, BindingResult result) {
+    @Operation(summary = "RegisterStudent", description = "To Resister StudentInfomations")
+    @PostMapping(value = "/registerStudent",
+            consumes = "application/json",
+            produces = "application/json")
+    public ResponseEntity<List<String>>
+        registerStudent(@Valid @RequestBody StudentDetail studentDetail, RegisterStudentRequest request, BindingResult result) {
 
         System.out.println("registerStudent() called");
         System.out.println("Student name: " + studentDetail.getStudent().getName());
+
 
         if (result.hasErrors()) {
             System.out.println("Validation errors:");
@@ -102,19 +107,33 @@ public class StudentController {
 
             List<String> errors = result.getFieldErrors().stream()
                     .map(e -> e.getField() + ": " + e.getDefaultMessage())
-                    .collect(Collectors.toList());
-
+                    .toList();
+            System.out.println("Validation passed");
+            System.out.println("Calling service.registerStudentandCourse()");
+            StudentDetail saved = service.registerStudentandCourse(studentDetail);
+            System.out.println("Saved student ID: " + saved.getStudent().getNumericId());
             return ResponseEntity.badRequest().body(errors);
         }
 
-        System.out.println("Validation passed");
-        System.out.println("Calling service.registerStudentandCourse()");
+        // DTO → ドメイン変換
+        Student student = new Student(
+                request.getId(),
+                request.getName(),
+                request.getKanaName(),
+                request.getNickname(),
+                request.getMailAddress(),
+                request.getAddress(),
+                request.getAge(),
+                request.getSex(),
+                request.getDeleted(),
+                request.getRemark(),
+                request.getCourse()
+        );
 
-        StudentDetail saved = service.registerStudentandCourse(studentDetail);
+        service.registerStudent(student);
 
-        System.out.println("Saved student ID: " + saved.getStudent().getNumericId());
         return ResponseEntity.ok(List.of("Registration success"));
-    }
+}
 
     /**
      * 受講生情報の更新を行います。キャンセルフラグの更新もここで行います(論理削除）

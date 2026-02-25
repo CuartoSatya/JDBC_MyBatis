@@ -17,7 +17,7 @@
             course,
             deleted
         FROM student
-        WHERE deleted = false
+        WHERE deleted = 0
     </select>
 
     <!-- 受講生の全件検索 -->
@@ -45,9 +45,9 @@
         SELECT id,
         student_id AS studentId,
         name,
-        starting_date AS startingDate,
-        assured_finishing_date AS assuredFinishingDate
-        FROM student_courses
+        starting_date AS startDate,
+        assured_finishing_date AS assuredFinishDate
+        FROM studentcourse
         WHERE student_id = #{studentId}
     </select>
 
@@ -89,10 +89,10 @@
             useGeneratedKeys="true"
             keyProperty="id"
             keyColumn="id">
-        INSERT INTO student_courses
+        INSERT INTO studentcourse
         (student_id, name, starting_date, assured_finishing_date)
         VALUES
-        (#{studentId}, #{name}, #{startingDate}, #{assuredFinishingDate})
+        (#{studentId}, #{name}, #{startDate}, #{assuredFinishDate})
     </insert>
 
     <!-- ⑤ 学生更新 -->
@@ -115,10 +115,10 @@
     <!-- ⑥ 学生コース更新 -->
     <update id="updateStudentCourse"
             parameterType="raisetech.student.management.data.StudentCourse">
-        UPDATE student_courses
+        UPDATE studentcourse
         SET name                  = #{name},
-        starting_date         = #{startingDate},
-        assured_finishing_date = #{assuredFinishingDate}
+        starting_date         = #{startDate},
+        assured_finishing_date = #{assuredFinishDate}
         WHERE id = #{id}
     </update>
 
@@ -128,8 +128,8 @@
         SELECT id,
         student_id AS studentId,
         name,
-        starting_date AS startingDate,
-        assured_finishing_date AS assuredFinishingDate
-        FROM student_courses
+        starting_date AS startDate,
+        assured_finishing_date AS assuredFinishDate
+        FROM studentcourse
     </select>
 </mapper>
