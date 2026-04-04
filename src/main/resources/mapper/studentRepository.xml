@@ -6,6 +6,7 @@
     <select id="findAllStudent" resultType="raisetech.student.management.data.Student">
         SELECT
             id_student AS id,
+            id_student AS numericId,
             name,
             kana_name AS kanaName,
             nickname,
@@ -24,6 +25,7 @@
     <select id="findStudentById" resultType="raisetech.student.management.data.Student">
         SELECT
             id_student AS id,
+            id_student AS numericId,
             name,
             kana_name AS kanaName,
             nickname,
@@ -42,30 +44,36 @@
     <select id="searchStudentCourse"
             parameterType="int"
             resultType="raisetech.student.management.data.StudentCourse">
-        SELECT id,
-        student_id AS studentId,
-        name,
-        starting_date AS startDate,
-        assured_finishing_date AS assuredFinishDate
-        FROM studentcourse
-        WHERE student_id = #{studentId}
+        SELECT
+          sc.id,
+          sc.student_id AS studentId,
+          sc.name AS courseName,
+          sc.starting_date AS startDate,
+          sc.assured_finishing_date AS assuredFinishDate,
+          st.status AS statusId
+        FROM student_courses sc
+        LEFT JOIN status_courses st
+          ON sc.id = st.id_course
+        WHERE sc.student_id = #{studentId}
     </select>
 
     <!-- ② IDで学生検索 -->
     <select id="findById"
             parameterType="int"
             resultType="raisetech.student.management.data.Student">
-        SELECT id_student AS id,
-        name,
-        kana_name AS kanaName,
-        nickname,
-        mail_address AS mailAddress,
-        address,
-        age,
-        sex,
-        remark,
-        course,
-        deleted
+        SELECT
+            id_student AS id,
+            id_student AS numericId,
+            name,
+            kana_name AS kanaName,
+            nickname,
+            mail_address AS mailAddress,
+            address,
+            age,
+            sex,
+            remark,
+            course,
+            deleted
         FROM student
         WHERE id_student = #{id}
     </select>
@@ -89,13 +97,22 @@
             useGeneratedKeys="true"
             keyProperty="id"
             keyColumn="id">
-        INSERT INTO studentcourse
+        INSERT INTO student_courses
         (student_id, name, starting_date, assured_finishing_date)
         VALUES
-        (#{studentId}, #{name}, #{startDate}, #{assuredFinishDate})
+        (#{studentId}, #{courseName}, #{startDate}, #{assuredFinishDate})
     </insert>
 
-    <!-- ⑤ 学生更新 -->
+    <!-- ⑤ 新規登録時に受講コース申込状況を追加　-->
+    <insert id="insertStatusCourse"
+            parameterType="raisetech.student.management.data.StatusCourses">
+        INSERT INTO status_courses
+        (id_course, status)
+        VALUES
+        (#{idCourse}, #{status})
+    </insert>
+
+    <!-- ⑥ 学生更新 -->
     <update id="updateStudent"
             parameterType="raisetech.student.management.data.Student">
         UPDATE student
@@ -112,24 +129,80 @@
         WHERE id_student = #{id}
     </update>
 
-    <!-- ⑥ 学生コース更新 -->
+    <!-- ⑦ 学生コース更新 -->
     <update id="updateStudentCourse"
             parameterType="raisetech.student.management.data.StudentCourse">
-        UPDATE studentcourse
-        SET name                  = #{name},
-        starting_date         = #{startDate},
-        assured_finishing_date = #{assuredFinishDate}
+        UPDATE student_courses
+        SET name              = #{courseName},
+            starting_date         = #{startDate},
+            assured_finishing_date = #{assuredFinishDate}
         WHERE id = #{id}
     </update>
 
-    <!-- ⑦ 学生コース全件検索 -->
+    <!-- ⑧ 学生コース申込状況更新 -->
+    <update id="updateStatusCourse"
+            parameterType="raisetech.student.management.data.StatusCourses">>
+        UPDATE student_courses
+        SET
+        status = #{statusId},
+        starting_date = #{startDate},
+        assured_finishing_date = #{assuredFinishingDate}
+        WHERE id_course = #{id}
+    </update>
+
+    <!-- ⑨ 学生コース全件検索 -->
     <select id="searchStudentCourseList"
         resultType="raisetech.student.management.data.StudentCourse">
-        SELECT id,
+        SELECT
+        sc.id,
+        sc.student_id AS studentId,
+        sc.name AS courseName,
+        sc.starting_date AS startDate,
+        sc.assured_finishing_date AS assuredFinishDate,
+        st.status AS statusId
+        FROM student_courses sc
+        LEFT JOIN status_courses st
+        ON sc.id = st.id_course
+    </select>
+
+    <!-- ⑩ 学生コース検索 -->
+    <select id="searchStudents" resultType="raisetech.student.management.data.StudentCoursesSearchResult">
+        SELECT
+            s.id_student AS studentId,
+            s.name AS name,
+            s.kana_name AS kanaName,
+            s.nickname AS nickname,
+            s.mail_address AS mailAddress,
+            s.address AS address,
+            s.age AS age,
+            s.sex AS sex,
+            s.remark AS remark,
+            s.deleted AS deleted,
+            sc.name AS courseName,
+            st.status AS statusId
+        FROM student s
+        INNER JOIN student_courses sc
+           ON s.id_student = sc.student_id
+        LEFT JOIN status_courses st
+           ON sc.id = st.id_course
+        <where>
+            <if test="courseName != null and courseName != ''">
+                sc.name LIKE CONCAT('%', #{courseName}, '%')
+            </if>
+            <if test="name != null and name != ''">
+                AND s.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!-- ⑪ 学生コース一覧画面 -->
+    <select id="searchAllStudentCourses" resultType="raisetech.student.management.data.StudentCourse">
+        SELECT
+        id,
         student_id AS studentId,
-        name,
+        name AS courseName,
         starting_date AS startDate,
         assured_finishing_date AS assuredFinishDate
-        FROM studentcourse
+        FROM student_courses
     </select>
 </mapper>

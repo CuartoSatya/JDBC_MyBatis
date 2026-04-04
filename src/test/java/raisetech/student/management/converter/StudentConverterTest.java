@@ -45,9 +45,9 @@ public class StudentConverterTest {
         // Assert（検証）
         assertThat(result).hasSize(2);
         assertThat(result.get(0).getStudent()).isEqualTo(student1);
-        assertThat(result.get(0).getStudentCourseList()).hasSize(2);
+        assertThat(result.get(0).getStudentCourses()).hasSize(2);
         assertThat(result.get(1).getStudent()).isEqualTo(student2);
-        assertThat(result.get(1).getStudentCourseList()).hasSize(1);
+        assertThat(result.get(1).getStudentCourses()).hasSize(1);
     }
 
    @Test
@@ -62,6 +62,6 @@ public class StudentConverterTest {
             converter.convertStudentDetails(students, courses);
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getStudentCourseList()).isEmpty();
+        assertThat(result.get(0).getStudentCourses()).isEmpty();
     }
 }

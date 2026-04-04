@@ -1,37 +1,30 @@
-package raisetech.student.management.controller;
+package raisetech.student.management.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import raisetech.student.management.controller.converter.StudentConverter;
 import raisetech.student.management.controller.dto.RegisterStudentRequest;
+import raisetech.student.management.controller.dto.UpdateStatusCourseRequest;
 import raisetech.student.management.data.Student;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.service.StudentService;
 
 import java.util.List;
 
-/**
- * 受講生の検索や登録、更新などを行うREST APIとして実行されるControllerです。
- */
 @RestController
 @RequestMapping("/api")
 @Validated
-public class StudentController {
+public class StudentApiController {
 
-    /** 受講生サービス
-     */
-    private StudentService service;
+    private final StudentService service;
 
-    /**　コンストラクタ
-     */
     @Autowired
-    public StudentController(StudentService service, StudentConverter converter) {
+    public StudentApiController(StudentService service) {
         this.service = service;
     }
 
@@ -47,75 +40,45 @@ public class StudentController {
         System.out.println("getStudentList() called");
         List<StudentDetail> studentList = service.searchStudentList();
         System.out.println("Returned studentList size: " + studentList.size());
+
         return ResponseEntity.ok(studentList);
     }
 
-    /**
-     * 　受講生検索です。
-     * 　IDに紐づく任意の受講生の情報を取得します。
-     *
-     * @param id　受講生ID
-     * @param model
-     * @return 受講生
-     */
-    @GetMapping("/student/html/{id}")
-    public String getStudent(@PathVariable String id,Model model) {
-        Integer numericId = Integer.valueOf(id);
-        StudentDetail studentDetail = service.findStudent(numericId);
-        model.addAttribute("studentDetail", studentDetail);
-        model.addAttribute("studentDetail", studentDetail);
-        return "updateStudent";
-    }
-
+    // 受講生1件取得
     @Operation(summary = "Get student by ID", description = "Fetch a student's information by their ID")
-    @GetMapping(value = "/student/{id}", produces = "application/json")
-    public ResponseEntity<StudentDetail> getStudentJson(@PathVariable String id) {
-        if (!id.matches("\\d+")) {System.out.println("Invalid student id received: " + id);
-            return ResponseEntity.badRequest().build();}
+    @GetMapping(value = "/student/detail/{id}", produces = "application/json")
+    public ResponseEntity<StudentDetail> getStudentJson(@PathVariable @Pattern(regexp = "\\d+") String id) {
         Integer numericId = Integer.valueOf(id);
         System.out.println("getStudentJson() called with id = " + id);
         StudentDetail detail = service.findStudent(numericId);
         System.out.println("Retrieved student name = " + detail.getStudent().getName());
-//        return ResponseEntity.ok(service.findStudent(numericId));
         return ResponseEntity.ok(detail);
-//        return service.findStudent(id);
     }
 
     /**
      * 受講生詳細の登録を行います。
      *
-     * @param studentDetail 受講生詳細
+     * @param request 受講生詳細
      * @return
      */
-    @Operation(summary = "RegisterStudent", description = "To Resister StudentInfomations")
-    @PostMapping(value = "/registerStudent",
-            consumes = "application/json",
-            produces = "application/json")
-    public ResponseEntity<List<String>>
-        registerStudent(@Valid @RequestBody StudentDetail studentDetail, RegisterStudentRequest request, BindingResult result) {
+    @Operation(summary = "RegisterStudent", description = "To Register Student Informations")
+    @PostMapping(value = "/registerStudent", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<List<String>> registerStudent(@Valid @RequestBody RegisterStudentRequest request,
+                                                        BindingResult result) {
 
         System.out.println("registerStudent() called");
-        System.out.println("Student name: " + studentDetail.getStudent().getName());
-
+        System.out.println("Student name: " + request.getName());
 
         if (result.hasErrors()) {
-            System.out.println("Validation errors:");
-
-            result.getFieldErrors().forEach(e ->
-                    System.out.println(" - " + e.getField() + ": " + e.getDefaultMessage())
-            );
-
             List<String> errors = result.getFieldErrors().stream()
                     .map(e -> e.getField() + ": " + e.getDefaultMessage())
                     .toList();
-            System.out.println("Validation passed");
-            System.out.println("Calling service.registerStudentandCourse()");
-            StudentDetail saved = service.registerStudentandCourse(studentDetail);
-            System.out.println("Saved student ID: " + saved.getStudent().getNumericId());
             return ResponseEntity.badRequest().body(errors);
         }
 
-        // DTO → ドメイン変換
+        System.out.println("Validation passed");
+        System.out.println("Calling service.registerStudent()");
+        // DTO : Data transfer object → ドメイン変換
         Student student = new Student(
                 request.getId(),
                 request.getName(),
@@ -131,9 +94,8 @@ public class StudentController {
         );
 
         service.registerStudent(student);
-
         return ResponseEntity.ok(List.of("Registration success"));
-}
+    }
 
     /**
      * 受講生情報の更新を行います。キャンセルフラグの更新もここで行います(論理削除）
@@ -143,8 +105,21 @@ public class StudentController {
      */
     @Operation(summary = "Update student", description = "Update student and course information")
     @PutMapping(value = "/updateStudent", consumes = "application/json")
-    public ResponseEntity<String> updateStudent(@Validated StudentDetail studentDetail) {
+    public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
         service.updateStudent(studentDetail);
         return ResponseEntity.ok("Update success");
+    }
+
+    /**
+     * 受講生情報の更新を行います。キャンセルフラグの更新もここで行います(論理削除）
+     *
+     * @param request 受講コース所法
+     * @return 実行結果
+     */
+    @PutMapping("/student/course/status")
+    public ResponseEntity<Void> updateStatusCourse(@RequestBody UpdateStatusCourseRequest request) {
+
+        service.updateStatusCourse(request);
+        return ResponseEntity.ok().build();
     }
 }

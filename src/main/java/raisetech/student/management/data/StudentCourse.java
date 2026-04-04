@@ -18,23 +18,24 @@ public class StudentCourse {
     private Integer id;
     @NotNull
     private Integer studentId;
-    private String name;
+    private String courseName;
     private LocalDateTime startDate;
     private LocalDateTime assuredFinishDate;
+    private Integer statusId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof StudentCourse)) return false;
-        StudentCourse that = (StudentCourse) o;
+        if (!(o instanceof StudentCourse that)) return false;
         return Objects.equals(studentId, that.studentId) &&
-                Objects.equals(name, that.name) &&
+                Objects.equals(courseName, that.courseName) &&
                 Objects.equals(startDate, that.startDate) &&
-                Objects.equals(assuredFinishDate, that.assuredFinishDate);
+                Objects.equals(assuredFinishDate, that.assuredFinishDate) &&
+                Objects.equals(statusId, that.statusId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(studentId, name, startDate, assuredFinishDate);
+        return Objects.hash(studentId, courseName, startDate, assuredFinishDate, statusId);
     }
 }

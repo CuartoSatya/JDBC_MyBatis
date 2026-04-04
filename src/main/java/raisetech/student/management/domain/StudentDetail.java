@@ -3,7 +3,6 @@ package raisetech.student.management.domain;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,5 +22,5 @@ public class StudentDetail {
     private Student student;
 
     @Valid
-    private List<StudentCourse> studentCourseList;
+    private List<StudentCourse> studentCourses;
 }

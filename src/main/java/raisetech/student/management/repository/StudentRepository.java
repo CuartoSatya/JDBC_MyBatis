@@ -2,6 +2,9 @@ package raisetech.student.management.repository;
 
 import org.apache.ibatis.annotations.*;
 import org.springframework.transaction.annotation.Transactional;
+import raisetech.student.management.controller.dto.UpdateStatusCourseRequest;
+import raisetech.student.management.data.StatusCourses;
+import raisetech.student.management.data.StudentCoursesSearchResult;
 import raisetech.student.management.data.Student;
 import raisetech.student.management.data.StudentCourse;
 
@@ -43,6 +46,22 @@ public interface StudentRepository {
      */
     List<StudentCourse> searchStudentCourse(Integer studentId);
 
+    /**
+     * 受講生コース情報の一覧画面を表示します。
+     */
+    List<StudentCourse> searchAllStudentCourses();
+
+    /**
+     * 受講生コース情報を検索します。
+     *
+     * @param name 生徒名
+     * @param courseName 受講コース名
+     * @return 受講コース情報
+     */
+    List<StudentCoursesSearchResult> searchStudents(
+            @Param("name") String name,
+            @Param("courseName") String courseName);
+
     Optional<Student> findById(Integer id);
 
     /**
@@ -60,6 +79,13 @@ public interface StudentRepository {
     void insertStudentCourse(StudentCourse studentsCourse);
 
     /**
+     * 新規登録時に受講コースの申込状況を追加する。
+     *
+     * @param statusCourses 受講コース申込状況
+     */
+    void insertStatusCourse(StatusCourses statusCourses);
+
+    /**
      * 受講生を更新します。
      *
      * @param student 受講生
@@ -69,7 +95,14 @@ public interface StudentRepository {
     /**
      * 受講生コース情報のコース名を更新します。
      *
-     * @param studentCourse 受講生コース情報
+     * @param studentCourse 受講コース名
      */
     void updateStudentCourse(StudentCourse studentCourse);
+
+    /**
+     * 受講生コース情報の申し込み状況を更新します。
+     *
+     * @param request　受講コースの申込状況など
+     */
+    void updateStatusCourse(UpdateStatusCourseRequest request);
 }

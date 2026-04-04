@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import raisetech.student.management.data.Student;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import raisetech.student.management.data.StudentCourse;
@@ -103,12 +105,16 @@ public class StudentRepositoryTest {
         List<StudentCourse> actual = sut.searchStudentCourse(1);
 
         StudentCourse expected = new StudentCourse();
+        expected.setId(2);
         expected.setStudentId(1);
-        expected.setName("AWScourse");
+        expected.setCourseName("AWScourse");
+        expected.setStatusId(2);
         expected.setStartDate(null);
         expected.setAssuredFinishDate(null);
 
-        assertThat(actual).contains(expected);
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .isEqualTo(List.of(expected));
     }
 
     /**
@@ -118,7 +124,7 @@ public class StudentRepositoryTest {
     void 受講生コース情報の登録が行えること() {
         StudentCourse course = new StudentCourse();
         course.setStudentId(1);
-        course.setName("NewCourse");
+        course.setCourseName("NewCourse");
         course.setStartDate(null);
         course.setAssuredFinishDate(null);
 
@@ -126,7 +132,7 @@ public class StudentRepositoryTest {
 
         List<StudentCourse> actual = sut.searchStudentCourse(1);
         assertThat(actual)
-                .extracting(StudentCourse::getName)
+                .extracting(StudentCourse::getCourseName)
                 .contains("NewCourse");
     }
 
@@ -151,13 +157,23 @@ public class StudentRepositoryTest {
     void 受講生コース名の更新が行えること() {
         List<StudentCourse> courses = sut.searchStudentCourse(1);
         StudentCourse course = courses.get(0);
-        course.setName("UpdatedCourse");
+        course.setCourseName("UpdatedCourse");
 
         sut.updateStudentCourse(course);
 
         List<StudentCourse> updated = sut.searchStudentCourse(1);
         assertThat(updated)
-                .extracting(StudentCourse::getName)
+                .extracting(StudentCourse::getCourseName)
                 .contains("UpdatedCourse");
+    }
+
+    @Test
+    void 受講生コース一覧画面用の全件検索が行えること() {
+        List<StudentCourse> actual = sut.searchAllStudentCourses();
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual)
+                .extracting(StudentCourse::getCourseName)
+                .contains("AWScourse");
     }
 }
