@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import raisetech.student.management.controller.converter.StudentConverter;
+import raisetech.student.management.controller.dto.UpdateStatusCourseRequest;
 import raisetech.student.management.data.Student;
 import raisetech.student.management.data.StudentCourse;
 import raisetech.student.management.domain.StudentDetail;
@@ -73,7 +74,7 @@ class StudentServiceTest {
 
         // Assert
         assertThat(actual.getStudent()).isEqualTo(student);
-        assertThat(actual.getStudentCourseList()).isEqualTo(courseList);
+        assertThat(actual.getStudentCourses()).isEqualTo(courseList);
         verify(repository, times(1)).findStudentById(id);
         verify(repository,times(1)).searchStudentCourse(id);
     }
@@ -115,7 +116,7 @@ class StudentServiceTest {
 
         StudentDetail input = new StudentDetail();
         input.setStudent(student);
-        input.setStudentCourseList(courseList);
+        input.setStudentCourses(courseList);
 
         // Act
         StudentDetail actual = sut.registerStudentandCourse(input);
@@ -124,22 +125,26 @@ class StudentServiceTest {
         verify(repository).insertStudent(student);
         verify(repository).insertStudentCourse(course);
         assertThat(actual.getStudent()).isEqualTo(student);
-        assertThat(actual.getStudentCourseList()).isEqualTo(courseList);
+        assertThat(actual.getStudentCourses()).isEqualTo(courseList);
     }
 
     @Test
     void updateStudent_updateStudentAndCourse() {
         // Arrange
         Student student = new Student();
+        student.setNumericId(1);
+
         StudentCourse course1 = new StudentCourse();
         course1.setId(1);  // ID が null でないと更新対象
+        course1.setStudentId(1);
+        course1.setCourseName("JavaCourse");
         StudentCourse course2 = new StudentCourse();
         course2.setId(null);  // 無視される
 
         List<StudentCourse> courseList = List.of(course1, course2);
         StudentDetail input = new StudentDetail();
         input.setStudent(student);
-        input.setStudentCourseList(courseList);
+        input.setStudentCourses(courseList);
 
         // Act
         sut.updateStudent(input);
@@ -147,7 +152,7 @@ class StudentServiceTest {
         // Assert
         verify(repository, times(1)).updateStudent(student);
         verify(repository, times(1)).updateStudentCourse(course1);
-        verify(repository, never()).updateStudentCourse(course2);
+        verify(repository, times(1)).updateStatusCourse(any(UpdateStatusCourseRequest.class));
     }
 
     @Test
@@ -173,5 +178,17 @@ class StudentServiceTest {
 
         // Assert
         assertThat(actual).isNull();
+    }
+
+    @Test
+    void searchAllStudentCourses_受講生コース一覧を取得できること() {
+        List<StudentCourse> expected = List.of(new StudentCourse());
+
+        when(repository.searchAllStudentCourses()).thenReturn(expected);
+
+        List<StudentCourse> actual = sut.searchAllStudentCourses();
+
+        assertThat(actual).isEqualTo(expected);
+        verify(repository, times(1)).searchAllStudentCourses();
     }
 }

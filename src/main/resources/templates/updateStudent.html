@@ -77,16 +77,23 @@
     </div>
 
     <div th:each="course, stat : *{studentCourses}">
-        <label th:for="'course_id_' + ${stat.index}">受講コースID: </label>
-        <input type="hidden"
-               th:id = "'course_id_' + ${stat.index}"
-               th:field="*{studentCourses[__${stat.index}__].id}" readonly/>
         <label th:for="'course_name_' + ${stat.index}">受講コース名: </label>
         <input type="text"
-               th:id = "'course_name_' + ${stat.index}"
-               th:field="*{studentCourses[__${stat.index}__].name}"/>
-    </div>
+               th:id="'course_name_' + ${stat.index}"
+               th:field="*{studentCourses[__${stat.index}__].courseName}" />
 
+        <label th:for="'status_id_' + ${stat.index}">申し込み状況: </label>
+        <select th:id="'status_id_' + ${stat.index}"
+                th:field="*{studentCourses[__${stat.index}__].statusId}">
+            <option th:value="0">仮申込</option>
+            <option th:value="1">本申込</option>
+            <option th:value="2">受講中</option>
+            <option th:value="3">受講終了</option>
+        </select>
+
+        <input type="hidden"
+               th:field="*{studentCourses[__${stat.index}__].id}" />
+    </div>
     <div>
         <button type="submit">更新</button>
     </div>

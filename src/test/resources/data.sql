@@ -14,7 +14,7 @@ VALUES ('Tanaka Taro','Tanaka Taro','Taro','TTallow@ymobile.ne.jp',
        ('Enami Kouji','Enami Kouji','Kouji','EnamiK@rink-ac.com',
         'Nara',34,'1','','',0);
 
-INSERT INTO studentcourse (student_id,name,starting_date,assured_finishing_date)
+INSERT INTO student_courses (student_id,name,starting_date,assured_finishing_date)
 VALUES (2,'WEBdesigningCourse','2024-01-04','2025-02-12'),
        (1,'AWScourse',NULL,NULL),
        (3,'AWScourse','2024-01-14','2024-12-26'),
@@ -22,3 +22,12 @@ VALUES (2,'WEBdesigningCourse','2024-01-04','2025-02-12'),
        (4,'GraphicCourse','2024-03-25','2025-03-02'),
        (6,'JavaCourse','2025-10-01','2025-12-31'),
        (7,'WEBdesigningCourse',NULL,NULL);
+
+INSERT INTO status_courses (id_course, status)
+VALUES (1, 2),
+       (2, 2),
+       (3, 3),
+       (4, 3),
+       (5, 3),
+       (6, 3),
+       (7, 2);

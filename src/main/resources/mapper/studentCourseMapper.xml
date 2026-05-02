@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="raisetech.student.management.repository.StudentCourseMapper">
+
+    <!-- ① resultMap -->
+    <resultMap id="studentCourseResultMap"
+               type="raisetech.student.management.data.StudentCourse">
+
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="name" column="name"/>
+        <result property="startingDate" column="starting_date"/>
+        <result property="assuredFinishingDate" column="assured_finishing_date"/>
+
+        <!-- 1対1関連 -->
+        <association property="statusCourses"
+                     javaType="raisetech.student.management.data.StatusCourses">
+
+            <id property="idCourse" column="id_course"/>
+            <result property="status" column="status"/>
+
+        </association>
+
+    </resultMap>
+
+
+    <!-- ② 全件 + status JOIN -->
+    <select id="findAllWithStatus"
+            resultMap="studentCourseResultMap">
+
+        SELECT sc.id,
+        sc.student_id,
+        sc.name,
+        sc.starting_date,
+        sc.assured_finishing_date,
+        st.id_course,
+        st.status
+        FROM studentcourse sc
+        LEFT JOIN status_courses st
+        ON sc.id = st.id_course
+
+    </select>
+
+
+    <!-- ③ studentId検索 -->
+    <select id="findByStudentId"
+            parameterType="int"
+            resultMap="studentCourseResultMap">
+
+        SELECT sc.id,
+        sc.student_id,
+        sc.name,
+        sc.starting_date,
+        sc.assured_finishing_date,
+        st.id_course,
+        st.status
+        FROM studentcourse sc
+        LEFT JOIN status_courses st
+        ON sc.id = st.id_course
+        WHERE sc.student_id = #{studentId}
+
+    </select>
+
+
+    <!-- ④ INSERT -->
+    <insert id="insertStudentCourse"
+            parameterType="raisetech.student.management.data.StudentCourse"
+            useGeneratedKeys="true"
+            keyProperty="id">
+    <!--    keyColumn="id" -->
+
+        INSERT INTO student_courses
+        (student_id, name, starting_date, assured_finishing_date)
+        VALUES
+        (#{studentId}, #{name}, #{startingDate}, #{assuredFinishingDate})
+
+    </insert>
+
+
+    <!-- ⑤ UPDATE -->
+    <update id="updateStudentCourse"
+            parameterType="raisetech.student.management.data.StudentCourse">
+
+        UPDATE student_courses
+        SET name = #{name},
+        starting_date = #{startingDate},
+        assured_finishing_date = #{assuredFinishingDate}
+        WHERE id = #{id}
+
+    </update>
+
+</mapper>

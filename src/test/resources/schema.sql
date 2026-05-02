@@ -13,11 +13,17 @@ create TABLE IF NOT EXISTS student
     deleted tinyint NOT NULL DEFAULT 0
 );
 
-create TABLE IF NOT EXISTS studentcourse
+create TABLE IF NOT EXISTS student_courses
 (
     id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
     student_id int NOT NULL,
     name varchar(100),
     starting_date date,
     assured_finishing_date date
+);
+
+CREATE TABLE IF NOT EXISTS status_courses
+(
+    id_course INT PRIMARY KEY,
+    status INT NOT NULL
 );

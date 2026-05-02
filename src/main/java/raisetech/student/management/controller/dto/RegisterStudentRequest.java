@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class RegisterStudentRequest {
 
-    @NotBlank(message = "ID is required.")
     private String id;
 
     @NotBlank(message = "Name is required.")
@@ -17,7 +16,7 @@ public class RegisterStudentRequest {
     @NotBlank(message = "Kana name is required.")
     private String kanaName;
 
-    @NotBlank
+    @NotBlank(message = "Nickname is required.")
     @Size(max = 20)
     private String nickname;
 
@@ -25,7 +24,7 @@ public class RegisterStudentRequest {
     @Email(message = "Invalid email format.")
     private String mailAddress;
 
-    @NotBlank
+    @NotBlank(message = "Address is required.")
     private String address;
 
     @NotNull
@@ -34,7 +33,7 @@ public class RegisterStudentRequest {
     private Integer age;
 
     @NotBlank
-    @Pattern(regexp = "^([123])$", message = "Sex must be 1,2,3")
+    @Pattern(regexp = "^([123])$", message = "Sex must be 1,2 or 3")
     private String sex;
 
     @NotNull

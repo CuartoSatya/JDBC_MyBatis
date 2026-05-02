@@ -36,7 +36,7 @@ public class StudentConverter {
                 )
                 .collect(Collectors.toList());
 
-        studentDetail.setStudentCourseList(convertStudentCourses);
+        studentDetail.setStudentCourses(convertStudentCourses);
         studentDetails.add(studentDetail);
     });
     return studentDetails;
